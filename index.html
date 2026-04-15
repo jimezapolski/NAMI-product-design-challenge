@@ -146,8 +146,8 @@
   /* ── HERO ── */
   #hero {
     min-height: 100vh; position: relative; overflow: hidden;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    text-align: center; padding: 120px 48px 80px;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    text-align: center; padding: 80px 48px 60px;
   }
   #particles-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; display: block; }
   /* Warm gradient overlay on top of particles */
@@ -160,20 +160,90 @@
   }
   .hero-content { position: relative; z-index: 1; max-width: 760px; }
   .hero-title {
-    font-size: clamp(72px, 12vw, 110px); font-weight: 700; color: #fff;
-    letter-spacing: 0.04em; line-height: 1; margin-bottom: 18px;
+    font-size: clamp(48px, 8vw, 80px); font-weight: 700; color: #fff;
+    letter-spacing: 0.04em; line-height: 1; margin-bottom: 10px;
     text-shadow: 0 0 80px rgba(153,168,249,0.3), 0 0 160px rgba(0,191,202,0.15);
   }
   .hero-sub {
-    font-size: clamp(22px, 3.5vw, 38px); color: #99A8F9; font-weight: 300;
-    margin-bottom: 18px; letter-spacing: 0.02em; font-style: italic;
+    font-size: clamp(16px, 2.5vw, 26px); color: #99A8F9; font-weight: 300;
+    margin-bottom: 10px; letter-spacing: 0.02em; font-style: italic;
   }
   .hero-body {
-    font-size: 12px; color: rgba(240,240,240,0.45); letter-spacing: 0.14em;
-    text-transform: uppercase; margin-bottom: 52px;
+    font-size: 11px; color: rgba(240,240,240,0.45); letter-spacing: 0.14em;
+    text-transform: uppercase; margin-bottom: 28px;
   }
-  .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 60px; }
+  .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
+/* ── HERO INSIGHTS ── */
+#hero-insights {
+  margin-top: 24px;
+}
 
+.hero-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+
+.hero-card {
+  background: rgba(153,168,249,0.06);
+  border: 1px solid rgba(153,168,249,0.15);
+  border-radius: 16px;
+  padding: 24px 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-card:hover {
+  border-color: rgba(153,168,249,0.35);
+  transform: translateY(-4px);
+}
+
+.hero-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #99A8F9, #00BFCA);
+}
+
+.hero-step-num {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #00BFCA;
+  margin-bottom: 10px;
+}
+
+.hero-card-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: #F0F0F0;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.hero-card-body {
+  font-size: 13px;
+  color: rgba(240,240,240,0.6);
+  line-height: 1.6;
+}
+
+  .hero-explore { margin-top: 40px; text-align: center; }
+
+/* responsive */
+@media(max-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media(max-width: 640px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+}
   /* Buttons */
   .btn-teal {
     background: #00BFCA; color: #1B1A51;
@@ -193,7 +263,7 @@
   .btn-outline:hover { box-shadow: 0 0 24px rgba(153,168,249,0.35); border-color: #99A8F9; transform: translateY(-2px); }
 
   .hero-character {
-    width: 200px; height: 260px; margin: 0 auto;
+    width: 100px; height: 120px; margin: 0 auto;
     background: radial-gradient(ellipse at center, rgba(153,168,249,0.12) 0%, rgba(0,191,202,0.06) 50%, transparent 75%);
     border-radius: 50% 50% 40% 40%;
     border: 1.5px dashed rgba(153,168,249,0.25);
@@ -212,6 +282,7 @@
   section { width: 100%; padding: 100px 52px; }
   .container { max-width: 1200px; margin: 0 auto; }
   .section-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #00BFCA; margin-bottom: 14px; display: block; }
+  .section-why { max-width: 760px; font-size: 15px; color: rgba(240,240,240,0.5); line-height: 1.8; margin-bottom: 48px; border-left: 2px solid rgba(0,191,202,0.3); padding-left: 20px; font-style: italic; }
   .section-title {
     font-size: clamp(34px, 5vw, 58px); font-weight: 300; color: #fff;
     margin-bottom: 14px; line-height: 1.1;
@@ -364,14 +435,14 @@
   .leg-line { width: 28px; height: 2px; }
 
   /* ── BRAND ── */
-  .brand-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+  .brand-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
   .char-main {
     width: 100%; aspect-ratio: 3/4; max-width: 340px;
     background: radial-gradient(ellipse at 50% 40%, rgba(0,191,202,0.18) 0%, rgba(153,168,249,0.1) 40%, transparent 75%);
     border-radius: 28px; border: 1.5px dashed rgba(153,168,249,0.25);
     display: flex; align-items: center; justify-content: center;
     color: rgba(240,240,240,0.22); font-size: 13px; letter-spacing: 0.07em; text-align: center; padding: 24px;
-    box-shadow: 0 0 80px rgba(153,168,249,0.1); margin-bottom: 24px;
+    box-shadow: 0 0 80px rgba(153,168,249,0.1); margin-bottom: 14px;
   }
   .char-poses-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(240,240,240,0.4); margin-bottom: 14px; }
   .char-poses { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
@@ -383,7 +454,7 @@
     transition: border-color 0.2s, background 0.2s;
   }
   .char-pose:hover { border-color: rgba(153,168,249,0.4); background: rgba(153,168,249,0.1); }
-  .brand-story { font-size: 15.5px; line-height: 1.9; color: rgba(240,240,240,0.8); margin-bottom: 38px; }
+  .brand-story { font-size: 15.5px; line-height: 1.9; color: rgba(240,240,240,0.8); margin-bottom: 24px; }
   .swatches { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 38px; }
   .sw { width: 78px; text-align: center; }
   .sw-circle { width: 52px; height: 52px; border-radius: 50%; margin: 0 auto 8px; border: 1px solid rgba(255,255,255,0.1); }
@@ -482,6 +553,85 @@
     color: rgba(240,240,240,0.72); line-height: 1.8; margin-bottom: 16px;
   }
 
+  /* ── STITCH RESULT ── */
+  .stitch-result { display: flex; gap: 40px; align-items: flex-start; margin-top: 40px; padding: 32px; background: rgba(153,168,249,0.04); border: 1px solid rgba(153,168,249,0.12); border-radius: 18px; }
+  .stitch-screen-wrap { flex: 0 0 260px; position: relative; min-height: 180px; border-radius: 14px; overflow: hidden; border: 1px solid rgba(153,168,249,0.2); }
+  .stitch-img { width: 100%; display: block; border-radius: 14px; }
+  .stitch-screen-wrap.stitch-placeholder .stitch-img { display: none; }
+  .stitch-ph-label {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    text-align: center; font-size: 12px; color: rgba(240,240,240,0.3); line-height: 1.6;
+    background: rgba(153,168,249,0.06); padding: 16px;
+  }
+  .stitch-screen-wrap:not(.stitch-placeholder) .stitch-ph-label { display: none; }
+  .stitch-commentary { flex: 1; }
+  .stitch-commentary-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #99A8F9; margin-bottom: 14px; font-weight: 500; }
+  .stitch-commentary-text { font-size: 14px; color: rgba(240,240,240,0.6); line-height: 1.75; }
+  @media(max-width:768px){ .stitch-result { flex-direction: column; } .stitch-screen-wrap { flex: unset; width: 100%; } }
+
+  /* ── ONBOARDING ── */
+  #onboarding-sec { background: linear-gradient(180deg, #151130 0%, #1B1A51 100%); }
+  .onb-flow { display: flex; flex-direction: column; gap: 0; margin-bottom: 52px; }
+  .onb-step {
+    display: flex; gap: 32px; align-items: flex-start;
+    padding: 28px 0; border-bottom: 1px solid rgba(153,168,249,0.1);
+  }
+  .onb-step:last-child { border-bottom: none; }
+  .onb-num {
+    font-size: 11px; letter-spacing: 3px; color: #00BFCA; font-weight: 500;
+    min-width: 36px; padding-top: 3px;
+  }
+  .onb-content { flex: 1; }
+  .onb-step-title { font-size: 17px; font-weight: 500; color: #F0F0F0; margin-bottom: 8px; }
+  .onb-step-body { font-size: 14px; color: rgba(240,240,240,0.55); line-height: 1.7; }
+  .onb-note {
+    background: rgba(0,191,202,0.06); border: 1px solid rgba(0,191,202,0.2);
+    border-radius: 16px; padding: 32px 36px;
+  }
+  .onb-note-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #00BFCA; margin-bottom: 12px; font-weight: 500; }
+  .onb-note p { font-size: 15px; color: rgba(240,240,240,0.65); line-height: 1.75; }
+  @media(max-width:768px){ .onb-step { flex-direction: column; gap: 8px; } }
+
+  /* ── ACCESSIBILITY ── */
+  .access-title { font-size: 22px; font-weight: 300; color: #fff; margin: 72px 0 12px; }
+  .access-intro { font-size: 14px; color: rgba(240,240,240,0.5); max-width: 760px; line-height: 1.7; margin-bottom: 32px; }
+  .access-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 64px; }
+  .access-card {
+    background: rgba(153,168,249,0.05); border: 1px solid rgba(153,168,249,0.12);
+    border-radius: 14px; padding: 24px 20px;
+  }
+  .access-icon { font-size: 22px; margin-bottom: 10px; }
+  .access-label { font-size: 13px; font-weight: 500; color: #99A8F9; margin-bottom: 8px; letter-spacing: 0.04em; }
+  .access-body { font-size: 13px; color: rgba(240,240,240,0.5); line-height: 1.65; }
+  @media(max-width:768px){ .access-grid { grid-template-columns: 1fr; } }
+
+  /* ── PRIORITIZATION MATRIX ── */
+  .prio-matrix { display: flex; align-items: stretch; gap: 8px; margin-bottom: 64px; }
+  .prio-axis-y, .prio-axis-y-low {
+    writing-mode: vertical-rl; text-orientation: mixed;
+    font-size: 10px; letter-spacing: 2px; color: rgba(240,240,240,0.3);
+    display: flex; align-items: center; padding: 8px 0; min-width: 18px;
+  }
+  .prio-axis-y { transform: rotate(180deg); }
+  .prio-grid-wrap { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr auto 1fr; gap: 2px; position: relative; }
+  .prio-quadrant {
+    background: rgba(153,168,249,0.04); border: 1px solid rgba(153,168,249,0.1);
+    border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 8px; min-height: 180px;
+  }
+  .prio-quadrant.q1 { border-color: rgba(0,191,202,0.25); background: rgba(0,191,202,0.05); }
+  .prio-quadrant.q2 { border-color: rgba(153,168,249,0.2); }
+  .prio-quadrant.q3 { border-color: rgba(153,168,249,0.1); }
+  .prio-quadrant.q4 { border-color: rgba(153,168,249,0.08); }
+  .prio-qlabel { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(240,240,240,0.3); margin-bottom: 6px; }
+  .prio-chip { display: inline-block; font-size: 12px; padding: 5px 12px; border-radius: 20px; width: fit-content; }
+  .prio-chip.teal { background: rgba(0,191,202,0.15); color: #00BFCA; border: 1px solid rgba(0,191,202,0.3); }
+  .prio-chip.lav  { background: rgba(153,168,249,0.12); color: #99A8F9; border: 1px solid rgba(153,168,249,0.25); }
+  .prio-chip.dim  { background: rgba(240,240,240,0.04); color: rgba(240,240,240,0.4); border: 1px solid rgba(240,240,240,0.1); }
+  .prio-axis-bottom { grid-column: 1/-1; display: flex; justify-content: space-between; padding: 6px 8px 0; font-size: 10px; letter-spacing: 2px; color: rgba(240,240,240,0.3); }
+  .prio-hline { display: none; }
+  .prio-vline { display: none; }
+  @media(max-width:768px){ .prio-grid-wrap { grid-template-columns: 1fr; } .prio-axis-y, .prio-axis-y-low { display: none; } }
+
   /* ── FIGJAM CTA ── */
   #figjam-cta { text-align: center; padding: 120px 52px; }
   .cta-eyebrow { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #00BFCA; margin-bottom: 20px; display: block; }
@@ -560,6 +710,7 @@
   <a href="#ideate-sec" onclick="closeMob()">Ideate</a>
   <a href="#flow-sec" onclick="closeMob()">Flow</a>
   <a href="#design-sec" onclick="closeMob()">Design</a>
+  <a href="#screens-sec" onclick="closeMob()">Screens</a>
   <a href="#ai-sec" onclick="closeMob()">AI</a>
 </div>
 
@@ -572,6 +723,7 @@
     <li><a href="#ideate-sec">Ideate</a></li>
     <li><a href="#flow-sec">Flow</a></li>
     <li><a href="#design-sec">Design</a></li>
+    <li><a href="#screens-sec">Screens</a></li>
     <li><a href="#ai-sec">AI</a></li>
   </ul>
   <button class="hamburger" id="ham"><span></span><span></span><span></span></button>
@@ -583,23 +735,74 @@
   <div class="hero-glow"></div>
   <div class="hero-content">
     <!-- [NAMI_CHARACTER] — Main Nami character, iridescent translucent ghost, floating -->
-    <div class="hero-character fade-in delay-4"><img src="assets/NAMI.png" alt="nami" width="200px" height="200px">
+    <div class="hero-character fade-in delay-4"><img src="assets/NAMI.png" alt="nami" style="width:90px;height:90px;object-fit:contain;">
     </div>
     <h1 class="hero-title fade-in">Nami</h1>
     <p class="hero-sub fade-in delay-1">Ride the wave</p>
     <p class="hero-body fade-in delay-2">Product Design Challenge by Jimena Zapolski — Light-it 2026</p>
-    <div class="hero-buttons fade-in delay-3">
-      <a href="https://www.figma.com/board/r8Iea5ztm9PwXiy12bfzKe/%E2%9A%A1-Product-Design-Challenge---Jimena-Zapolski-s-board?node-id=0-1&t=poiOToTGj7bO9FVu-1" target="_blank" rel="noopener" class="btn-teal">View FigJam Board</a>
-      <a href="#process-sec" class="btn-outline">Explore process</a>
-    </div>
-    
   </div>
+ <!-- ══ HERO INSIGHTS / VALUE BLOCK ══ -->
+   <div id="hero-insights" class="fade-in delay-3">
+ 
+    <div class="hero-grid">
+
+      <div class="hero-card">
+        <div class="hero-step-num">01 — THE BRIEF</div>
+        <div class="hero-card-title">Designing for anxiety beyond the therapist’s office</div>
+        <div class="hero-card-body">
+          Create a digital experience that helps people manage anxiety in everyday life—especially in moments where professional support is not immediately available.
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="hero-step-num">02 — THE PROBLEM</div>
+        <div class="hero-card-title">Anxiety doesn’t wait for therapy — it happens in real life.</div>
+        <div class="hero-card-body">
+          Through research, I identified a critical gap: anxiety doesn’t happen during therapy, it happens in between. For young students, existing tools fail exactly when they need help the most.
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="hero-step-num">03 — FOCUS</div>
+        <div class="hero-card-title">This isn't about meditation. It's about immediate support.</div>
+        <div class="hero-card-body">
+        This project focuses on students who are already in therapy but still experience anxiety spikes. They aren't looking for content; they need something to help them in the moment.
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="hero-step-num">04 — CORE PAIN POINT</div>
+        <div class="hero-card-title">"I've tried apps before, but they feel too generic — like they don't really get me."</div>
+        <div class="hero-card-body">
+          In moments of anxiety, teenagers lack a familiar and accessible presence they can rely on. There is no immediate, human support when an episode occurs.
+      </div>
+        </div>
+
+      <div class="hero-card">
+        <div class="hero-step-num">05 — SOLUTION</div>
+        <div class="hero-card-title">Nami: a real-time companion for anxiety</div>
+        <div class="hero-card-body">
+          Nami is a real-time AI companion designed for the exact moment anxiety hits. It learns from the user, understands their needs, and guides them through simple, practical steps, bridging the gap between therapy sessions and real-life moments of anxiety.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+ 
+
+  <div class="hero-explore fade-in delay-3">
+    <a href="#process-sec" class="btn-outline">Explore process ↓</a>
+  </div>
+</div>
+  
 </section>
 
 <!-- wave -->
 <div class="wave-sep"><svg viewBox="0 0 1440 70" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="height:90px;"><path d="M0,35 C240,70 480,0 720,35 C960,70 1200,0 1440,35 L1440,70 L0,70 Z" fill="rgba(153,168,249,0.05)"/></svg></div>
 
-<!-- ══ BRIEF ══ -->
+<!-- 
 <section id="brief-sec">
   <div class="container">
     <span class="section-label fade-in">The challenge</span>
@@ -610,7 +813,7 @@
       </p>
     </div>
   </div>
-</section>
+</section> -->
 
 <!-- ══ PROCESS ══ -->
 <section id="process-sec">
@@ -657,6 +860,7 @@
     <span class="section-label fade-in">Empathize</span>
     <h2 class="section-title fade-in delay-1"><span class="glow">Research</span></h2>
     <p class="section-sub fade-in delay-2">Understanding the real problem before designing the solution</p>
+    <p class="section-why fade-in delay-2">Before I designed a single screen, I needed to understand what actually happens in the body and mind during an anxiety episode — not what wellness apps assume happens. I spent time in clinical studies, app store reviews, and Reddit threads where real people described what they reach for at 3am. The gap between what research shows and what products offer was the real brief.</p>
 
     <div class="research-grid">
       <!-- Card 1 -->
@@ -773,9 +977,7 @@
       <div class="ins"><div class="ins-n">05</div><div class="ins-t">The gap between therapy sessions is where most suffering happens — and where no tool currently reaches. That's the real design opportunity.</div></div>
     </div>
 
-    <div style="text-align:center;margin-top:52px;" class="fade-in">
-      <a href="https://www.figma.com/board/r8Iea5ztm9PwXiy12bfzKe/%E2%9A%A1-Product-Design-Challenge---Jimena-Zapolski-s-board?node-id=0-1&t=poiOToTGj7bO9FVu-1" target="_blank" rel="noopener" class="btn-teal">See full research in FigJam →</a>
-    </div>
+  
   </div>
 </section>
 
@@ -872,6 +1074,7 @@
   <div class="container" style="text-align:center;">
     <span class="section-label fade-in">Problem Statement</span>
     <h2 class="section-title fade-in delay-1"><span class="glow">Define</span></h2>
+    <p class="section-why fade-in delay-1" style="max-width:720px;margin:0 auto 32px;">After mapping all the research, I needed a single human truth to design from. I built a composite user — Sofía — not as a demographic profile but as a real behavioral portrait: the exact phone habits, the specific self-talk, the moment she decides to delete an app. Everything else was cut. If a design decision didn't answer Sofía's needs, it didn't belong in the product.</p>
     <p class="prob-stmt fade-in delay-2">
       "Guide teenagers in therapy through the peak moment of an anxiety episode, when their learned coping tools feel unreachable and professional support is not available."
     </p>
@@ -903,6 +1106,7 @@
     <span class="section-label fade-in">Ideation</span>
     <h2 class="section-title fade-in delay-1"><span class="glow">Ideate</span></h2>
     <p class="section-sub fade-in delay-2">20+ concepts, one clear direction.</p>
+    <p class="section-why fade-in delay-2">I gave myself permission to generate without filtering — every idea that came from the research went on the board. The constraint wasn't creativity, it was Sofía: "Would she trust this? Would she delete it?" That question eliminated most of the ideas in the first pass. The ones that survived weren't the most clever — they were the ones that solved for the exact moment she picks up her phone during an episode.</p>
     <div class="brain-grid fade-in delay-3">
       <div class="brain-card">A friendly emotional companion that lives on the home screen — not a bot, not a doctor. A friend.</div>
       <div class="brain-card">Character changes expression based on the user's mood and evolves visually as the user grows.</div>
@@ -919,6 +1123,46 @@
       <div class="brain-card">Conversational onboarding — user tells character about triggers, what helps, therapy days. Feeds the AI so every interaction feels personal.</div>
       <div class="brain-card">Schedule therapy days. Character asks after each session: "How did it go today?" Soft check-in, no pressure.</div>
       <div class="brain-card">Character talks to her directly on first open, uses her name immediately. Not a tutorial — a conversation.</div>
+    </div>
+
+    <!-- PRIORITIZATION MATRIX -->
+    <h3 style="font-size:22px;font-weight:300;color:#fff;margin:64px 0 8px;" class="fade-in">Prioritization matrix</h3>
+    <p style="font-size:14px;color:rgba(240,240,240,0.45);margin-bottom:32px;" class="fade-in delay-1">Each concept mapped against two variables: impact on the user during an anxiety episode, and urgency to include in the first version.</p>
+    <div class="prio-matrix fade-in delay-2">
+      <div class="prio-axis-y"><span>HIGH URGENCY</span></div>
+      <div class="prio-grid-wrap">
+        <div class="prio-quadrant q1">
+          <div class="prio-qlabel">Build now</div>
+          <div class="prio-chip teal">No-friction crisis entry (shake/volume)</div>
+          <div class="prio-chip teal">Body-first audio guide</div>
+          <div class="prio-chip teal">One screen = one action</div>
+          <div class="prio-chip teal">Character front and center</div>
+          <div class="prio-chip teal">Conversational onboarding</div>
+        </div>
+        <div class="prio-quadrant q2">
+          <div class="prio-qlabel">Build now (lower urgency)</div>
+          <div class="prio-chip lav">Therapy schedule + check-in</div>
+          <div class="prio-chip lav">Episode log for therapist</div>
+          <div class="prio-chip lav">"After the wave" celebration</div>
+          <div class="prio-chip lav">Switch to chat if audio unavailable</div>
+        </div>
+        <div class="prio-quadrant q3">
+          <div class="prio-qlabel">Defer to v2</div>
+          <div class="prio-chip dim">Character visual evolution</div>
+          <div class="prio-chip dim">Shareable milestone cards</div>
+          <div class="prio-chip dim">Streak / gamification system</div>
+        </div>
+        <div class="prio-quadrant q4">
+          <div class="prio-qlabel">Research first</div>
+          <div class="prio-chip dim">Smartwatch auto-detection</div>
+          <div class="prio-chip dim">Therapist dashboard (B2B)</div>
+          <div class="prio-chip dim">Full long-term AI memory</div>
+        </div>
+        <div class="prio-hline"></div>
+        <div class="prio-vline"></div>
+        <div class="prio-axis-bottom"><span>LOW IMPACT</span><span>HIGH IMPACT</span></div>
+      </div>
+      <div class="prio-axis-y-low"><span>LOW URGENCY</span></div>
     </div>
 
     <h3 style="font-size:22px;font-weight:300;color:#fff;margin-bottom:36px;" class="fade-in">Minimum Viable Product</h3>
@@ -950,6 +1194,7 @@
     <span class="section-label fade-in">User flow</span>
     <h2 class="section-title fade-in delay-1"><span class="glow">User Flow</span></h2>
     <p class="section-sub fade-in delay-2">Every friction point has a recovery path</p>
+    <p class="section-why fade-in delay-2">Before touching Figma, I needed to map every path the user could take — including the ones that go wrong. The biggest design question wasn't "how does she reach crisis mode?" but "what happens when she can't engage, can't listen, can't stay in the app?" Every NO branch has a recovery. No dead ends. The flow isn't a happy path — it's a safety net.</p>
     <div class="flow-container fade-in delay-3">
       <!-- Full horizontal flow — expanded viewBox to prevent overlaps -->
       <svg viewBox="0 0 2500 720" xmlns="http://www.w3.org/2000/svg" style="min-width:1600px;width:100%;">
@@ -1184,9 +1429,9 @@
       </div>
       <div>
         <p class="brand-story">
-          <strong style="color:#00BFCA;">Nami (波)</strong> — Japanese for "wave."<br><br>
-          Anxiety is a wave. You can't stop it. You can't ignore it. But you can learn to ride it. Nami doesn't promise there won't be waves — it promises to be there when they arrive.<br><br>
-          The character shares its name with the app. That makes it more personal — it's not "the app," it's Nami. A friend who happens to know exactly what to do. Warm, direct, and slightly humorous. Not a bot. Not a doctor.
+          <strong style="color:#00BFCA;">Nami (波)</strong> Japanese for "wave."<br><br>
+          Anxiety is a wave. You can't stop it. You can't ignore it. But you can learn to ride it. Nami doesn't promise there won't be waves, it promises to be there when they arrive.<br><br>
+          The character shares its name with the app. That makes it more personal, it's not "the app," it's Nami. A friend who happens to know exactly what to do. Warm, direct, and slightly humorous. Not a bot. Not a doctor.
         </p>
         <div class="swatches">
           <div class="sw"><div class="sw-circle" style="background:#1B1A51;"></div><div class="sw-hex">#1B1A51</div><div class="sw-name">Deep Ocean</div></div>
@@ -1214,6 +1459,7 @@
     <span class="section-label fade-in">Design rationale</span>
     <h2 class="section-title fade-in delay-1">Why every decision <span class="glow">matters</span></h2>
     <p class="section-sub fade-in delay-2">Each design choice traces back to a specific research insight.</p>
+    <p class="section-why fade-in delay-2">Good design decisions feel obvious after the fact — but each one here was a deliberate choice made against an easier alternative. The dark background was a temptation to skip. The removal of streaks went against every engagement metric playbook. The wave transition adds time to a flow designed for speed. Each of these choices exists because the research demanded it, not because it was the safe option.</p>
     <div class="dd-grid fade-in delay-3">
       <div class="dd-card">
         <div class="dd-main">One screen = one action</div>
@@ -1326,6 +1572,42 @@
       <a href="https://www.figma.com/design/R5Ab1IoByUkSThCSkgfojM/%E2%9A%A1-Product-Design-Challenge---Jimena-Zapolski-s-design?node-id=0-1&t=lGEQO0wlO5AUoAgO-1" target="_blank" rel="noopener" class="btn-teal">View in Figma Design →</a>
     </div>
 
+    <!-- ACCESSIBILITY -->
+    <div class="access-title fade-in">Accessibility — designing for crisis states</div>
+    <p class="access-intro fade-in delay-1">Anxiety episodes affect fine motor control, cognitive load, and visual processing. Every accessibility decision here was made with that context in mind — not as a compliance checklist, but as a direct response to what the research said about how the body behaves during a panic attack.</p>
+    <div class="access-grid fade-in delay-2">
+      <div class="access-card">
+        <div class="access-icon">👁</div>
+        <div class="access-label">High contrast</div>
+        <div class="access-body">Dark navy background with white text meets WCAG AA at all text sizes. Teal (#00BFCA) and Lavender (#99A8F9) maintain 4.5:1+ contrast ratio for key CTAs — readable even with tunnel vision during high anxiety.</div>
+      </div>
+      <div class="access-card">
+        <div class="access-icon">☝️</div>
+        <div class="access-label">Large touch targets</div>
+        <div class="access-body">All primary CTAs are minimum 56px tall. During a panic attack, fine motor control degrades — small buttons become impossible. The crisis activation button is intentionally oversized, designed for trembling hands.</div>
+      </div>
+      <div class="access-card">
+        <div class="access-icon">🔤</div>
+        <div class="access-label">Minimal reading load</div>
+        <div class="access-body">No screen in the crisis flow requires reading more than 7 words at once. Text size minimum 17px. Short sentences, high line-height. Cognitive load drops sharply during an anxiety spike — the UI absorbs that cost.</div>
+      </div>
+      <div class="access-card">
+        <div class="access-icon">🔊</div>
+        <div class="access-label">Audio + text parallel</div>
+        <div class="access-body">Every instruction is delivered via audio AND displayed as text simultaneously. Users in public spaces, with hearing differences, or who can't process audio during a crisis can still follow every step.</div>
+      </div>
+      <div class="access-card">
+        <div class="access-icon">✋</div>
+        <div class="access-label">No gesture-only interactions</div>
+        <div class="access-body">The shake gesture and volume shortcut are optional activations — every function is also accessible via tap. Users with motor differences or who are in a context where movement isn't possible aren't locked out.</div>
+      </div>
+      <div class="access-card">
+        <div class="access-icon">🌙</div>
+        <div class="access-label">Night-mode by default</div>
+        <div class="access-body">Dark UI is the only mode. Anxiety peaks at night in low-light environments — a bright white screen is physiologically jarring. No toggle needed: the default is already optimized for 3am.</div>
+      </div>
+    </div>
+
     <div class="iter-title fade-in">Iteration history</div>
     <div class="iter-grid fade-in delay-1">
       <div class="glass">
@@ -1347,6 +1629,74 @@
   </div>
 </section>
 
+<!-- ══ ONBOARDING ══ -->
+<section id="onboarding-sec">
+  <div class="container">
+    <span class="section-label fade-in">First interaction</span>
+    <h2 class="section-title fade-in delay-1">The <span class="glow">Onboarding</span></h2>
+    <p class="section-sub fade-in delay-2">Before Nami can help, Nami needs to know you</p>
+    <p class="section-why fade-in delay-2">Most apps dump you into a generic home screen. Nami does something different from the very first second: it listens. The onboarding isn't a tutorial — it's a conversation where Nami learns what makes you anxious, what has helped before, and when you see your therapist. That data becomes the foundation for every interaction that follows. The more Nami knows, the more precise the help when the episode hits.</p>
+
+    <div class="onb-flow fade-in delay-3">
+
+      <div class="onb-step">
+        <div class="onb-num">01</div>
+        <div class="onb-content">
+          <div class="onb-step-title">Nami introduces herself</div>
+          <div class="onb-step-body">Not a terms and conditions screen. Not a feature tour. Nami speaks directly to the user in first person: "Hey, I'm Nami. I'm here for the moments when things get hard." Warm, short, zero corporate language. The user's first impression sets the trust foundation everything else is built on.</div>
+        </div>
+      </div>
+
+      <div class="onb-step">
+        <div class="onb-num">02</div>
+        <div class="onb-content">
+          <div class="onb-step-title">Nami asks your name</div>
+          <div class="onb-step-body">One field. Just your name. From this point on, Nami uses it in every interaction. "Hey, Sofía" instead of "Hey, user." Personalization begins immediately — before any feature is unlocked.</div>
+        </div>
+      </div>
+
+      <div class="onb-step">
+        <div class="onb-num">03</div>
+        <div class="onb-content">
+          <div class="onb-step-title">What makes you anxious?</div>
+          <div class="onb-step-body">Nami offers 6–8 common triggers as soft-select chips: exams, social situations, nights alone, health worries, family, uncertainty. The user picks what resonates. These become the context layer that shapes Nami's language and priority responses. Nothing clinical. Nothing overwhelming.</div>
+        </div>
+      </div>
+
+      <div class="onb-step">
+        <div class="onb-num">04</div>
+        <div class="onb-content">
+          <div class="onb-step-title">What's helped you before?</div>
+          <div class="onb-step-body">Nami asks what has worked in the past: music, movement, cold water, breathing, calling someone, distraction. This seeds the initial toolkit. The AI doesn't start from zero — it starts from what the user already knows about themselves. The first crisis response will feel familiar, not foreign.</div>
+        </div>
+      </div>
+
+      <div class="onb-step">
+        <div class="onb-num">05</div>
+        <div class="onb-content">
+          <div class="onb-step-title">When do you see your therapist?</div>
+          <div class="onb-step-body">Day and frequency. Nami sets a recurring check-in for the day after each session: "How did it go today?" Soft, no pressure. This creates the bridge between sessions and gives the user a sense that Nami and their therapist are working together — even though they're not.</div>
+        </div>
+      </div>
+
+      <div class="onb-step">
+        <div class="onb-num">06</div>
+        <div class="onb-content">
+          <div class="onb-step-title">Set up the shortcut</div>
+          <div class="onb-step-body">The final onboarding screen walks the user through setting up the widget and shake gesture. Framed not as a setup task but as "your escape hatch." The goal: the user knows before the first episode exactly how to reach Nami in under 3 seconds, without unlocking, searching, or thinking.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="onb-note fade-in delay-1">
+      <div class="onb-note-label">Why this matters</div>
+      <p>Every answer the user gives during onboarding is stored and used. The first time a crisis episode hits, Nami doesn't ask "what's wrong?" — it already knows the user's triggers, their preferred strategies, and their name. The response is immediate and personal. That's the difference between an app that feels like a stranger and one that feels like it knows you.</p>
+    </div>
+
+  </div>
+</section>
+
 <!-- ══ AI USAGE ══ -->
 <section id="ai-sec" class="fade-in">
   <div class="container">
@@ -1362,7 +1712,7 @@
       <div class="glass">
         <div class="ai-icon">💡</div>
         <div class="ai-title">Definition &amp; Ideation</div>
-        <div class="ai-desc">I used Claude to generate variations of "How might I...?" questions based on others I had already created, allowing me to expand my ideas during brainstorming sessions while remaining within the user profile constraints. I was asked to argue against each concept from Sofia's perspective: "Would I trust this? Would I delete it?" The decision "not to use the streak system" stemmed directly from this question.</div>
+        <div class="ai-desc">I used Claude to generate variations of "How might We...?" questions based on others I had already created, allowing me to expand my ideas during brainstorming sessions while remaining within the user profile constraints. I was asked to argue against each concept from Sofia's perspective: "Would I trust this? Would I delete it?" The decision "not to use the streak system" stemmed directly from this question.</div>
       </div>
       <div class="glass">
         <div class="ai-icon">🎨</div>
@@ -1383,7 +1733,22 @@
         Screen 2 — Crisis mode / Storm screen: full dark background, Nami larger and more present, single bold action text instruction in the center ("Press your feet into the floor"), one large teal CTA button at the bottom, no menus, no distractions, audio wave animation behind Nami suggesting she is speaking.
         Typography: modern, rounded, light weight. Emotional but clean. No serif fonts.
         Mood reference: Calm, deep, immersive. Like floating underwater at night. The UI should feel like a safe container, not a medical tool."</div>
-    
+      <!-- Google Stitch result -->
+      <div class="stitch-result fade-in delay-2">
+        <div class="stitch-screen-wrap">
+          <!-- Drop your Stitch screenshot here: assets/stitch-result.png -->
+          <img src="assets/stitch-result.png" alt="Google Stitch result" class="stitch-img" onerror="this.parentElement.classList.add('stitch-placeholder')">
+          <div class="stitch-ph-label">[ Stitch screenshot ]<br>Save as assets/stitch-result.png</div>
+        </div>
+        <div class="stitch-commentary">
+          <div class="stitch-commentary-label">What it got right — and what it missed</div>
+          <p class="stitch-commentary-text">
+            <!-- ✏️ Replace this text with your actual commentary about the Stitch result -->
+            El resultado de Stitch analizó bien las instrucciones del prompt y generó una designación system coherente con lo que había expresado — colores, jerarquía tipográfica y el tono visual oscuro estaban alineados. Sin embargo, el resultado visual no alcanzó lo que tenía en mente: la presencia del personaje no tenía la personalidad ni la calidez que Nami necesita para conectar con el usuario en un momento de crisis. Me confirmó que la dirección visual correcta requería decisiones de diseño propias, no generadas.
+          </p>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -1436,7 +1801,7 @@
 
 <!-- ══ FOOTER ══ -->
 <footer>
-  <div class="ft">Nami — designed by Jimena Zapolski</div>
+  <div class="ft">Thanks for watching — Jimena Zapolski</div>
   <svg width="56" height="18" viewBox="0 0 56 18" xmlns="http://www.w3.org/2000/svg">
     <path d="M0,9 C9,2 18,16 28,9 C38,2 47,16 56,9" stroke="rgba(153,168,249,0.4)" stroke-width="1.8" fill="none"/>
   </svg>
