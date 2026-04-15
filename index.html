@@ -561,7 +561,7 @@
 
   /* ── STITCH RESULT ── */
   .stitch-result { display: flex; gap: 40px; align-items: flex-start; margin-top: 40px; padding: 32px; background: rgba(153,168,249,0.04); border: 1px solid rgba(153,168,249,0.12); border-radius: 18px; }
-  .stitch-screen-wrap { flex: 0 0 260px; position: relative; min-height: 180px; border-radius: 14px; overflow: hidden; border: 1px solid rgba(153,168,249,0.2); }
+  .stitch-screen-wrap { flex: 0 0 350px; position: relative; border-radius: 14px; overflow: hidden; border: 1px solid rgba(153,168,249,0.2); }
   .stitch-img { width: 100%; display: block; border-radius: 14px; }
   .stitch-screen-wrap.stitch-placeholder .stitch-img { display: none; }
   .stitch-ph-label {
@@ -805,7 +805,7 @@
  
 
   <div class="hero-explore fade-in delay-3">
-    <a href="#process-sec" class="btn-outline">Explore process ↓</a>
+    <a href="#process-sec" class="btn-outline">Explore process</a>
   </div>
 </div>
   
@@ -814,18 +814,6 @@
 <!-- wave -->
 <div class="wave-sep"><svg viewBox="0 0 1440 70" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="height:90px;"><path d="M0,35 C240,70 480,0 720,35 C960,70 1200,0 1440,35 L1440,70 L0,70 Z" fill="rgba(153,168,249,0.05)"/></svg></div>
 
-<!-- 
-<section id="brief-sec">
-  <div class="container">
-    <span class="section-label fade-in">The challenge</span>
-    <h2 class="section-title fade-in delay-1">The <span class="glow">Brief</span></h2>
-    <div class="glass fade-in delay-2" style="max-width:860px;">
-      <p class="brief-text">
-        "Design a digital experience that helps people manage moments of anxiety in their daily lives, especially when they don't have <em>immediate access to professional support</em>."
-      </p>
-    </div>
-  </div>
-</section> -->
 
 <!-- ══ PROCESS ══ -->
 <section id="process-sec">
@@ -872,7 +860,7 @@
     <span class="section-label fade-in">Empathize</span>
     <h2 class="section-title fade-in delay-1"><span class="glow">Research</span></h2>
     <p class="section-sub fade-in delay-2">Understanding the real problem before designing the solution</p>
-    <p class="section-why fade-in delay-2">Before I designed a single screen, I needed to understand what actually happens in the body and mind during an anxiety episode — not what wellness apps assume happens. I spent time in clinical studies, app store reviews, and Reddit threads where real people described what they reach for at 3am. The gap between what research shows and what products offer was the real brief.</p>
+    <p class="section-why fade-in delay-2">Before designing, I needed to understand what actually happens in the body and mind during an anxiety episode, not what wellness apps assume happens. I spent time comparing clinical studies, app store reviews, and Reddit forums where real people write about their experiences. The gap between what the research shows and what the products offer was the real challenge.</p>
 
     <div class="research-grid">
       <!-- Card 1 -->
@@ -1000,6 +988,7 @@
   <div class="container">
     <span class="section-label fade-in">User persona</span>
     <h2 class="section-title fade-in delay-1">Meet <span class="glow">Sofía</span></h2>
+    <p class="section-why fade-in delay-2">After analyzing all the research, I needed a human persona on which to base the design. Like a portrait of real behavior: exact phone habits, specific internal dialogue, what happens to their generation.</p>
     <div class="glass persona-grid fade-in delay-2">
       <div>
         <div class="p-name">Sofía</div>
@@ -1086,7 +1075,7 @@
   <div class="container" style="text-align:center;">
     <span class="section-label fade-in">Problem Statement</span>
     <h2 class="section-title fade-in delay-1"><span class="glow">Define</span></h2>
-    <p class="section-why fade-in delay-1" style="max-width:720px;margin:0 auto 32px;">After mapping all the research, I needed a single human truth to design from. I built a composite user — Sofía — not as a demographic profile but as a real behavioral portrait: the exact phone habits, the specific self-talk, the moment she decides to delete an app. Everything else was cut. If a design decision didn't answer Sofía's needs, it didn't belong in the product.</p>
+    <p class="section-why fade-in delay-1" style="max-width:720px;margin:0 auto 32px;">At this stage it was important for me to put the problem into a sentence and make each problem an opportunity for design.</p>
     <p class="prob-stmt fade-in delay-2">
       "Guide teenagers in therapy through the peak moment of an anxiety episode, when their learned coping tools feel unreachable and professional support is not available."
     </p>
@@ -1118,7 +1107,7 @@
     <span class="section-label fade-in">Ideation</span>
     <h2 class="section-title fade-in delay-1"><span class="glow">Ideate</span></h2>
     <p class="section-sub fade-in delay-2">20+ concepts, one clear direction.</p>
-    <p class="section-why fade-in delay-2">I gave myself permission to generate without filtering — every idea that came from the research went on the board. The constraint wasn't creativity, it was Sofía: "Would she trust this? Would she delete it?" That question eliminated most of the ideas in the first pass. The ones that survived weren't the most clever — they were the ones that solved for the exact moment she picks up her phone during an episode.</p>
+    <p class="section-why fade-in delay-2">I allowed myself to generate ideas without filters; every idea that emerged from the research I wrote on the whiteboard. The limitation wasn't creativity, but Sofia: "Would you trust this? Would you delete it?" That question eliminated most of the ideas in the first round. The ones that survived were those that described the exact moment she grabs the phone during an episode.</p>
     <div class="brain-grid fade-in delay-3">
       <div class="brain-card">A friendly emotional companion that lives on the home screen — not a bot, not a doctor. A friend.</div>
       <div class="brain-card">Character changes expression based on the user's mood and evolves visually as the user grows.</div>
@@ -1217,7 +1206,7 @@
     <span class="section-label fade-in">User flow</span>
     <h2 class="section-title fade-in delay-1"><span class="glow">User Flow</span></h2>
     <p class="section-sub fade-in delay-2">Every friction point has a recovery path</p>
-    <p class="section-why fade-in delay-2">Before touching Figma, I needed to map every path the user could take — including the ones that go wrong. The biggest design question wasn't "how does she reach crisis mode?" but "what happens when she can't engage, can't listen, can't stay in the app?" Every NO branch has a recovery. No dead ends. The flow isn't a happy path — it's a safety net.</p>
+    <p class="section-why fade-in delay-2">Before using Figma, I needed to map out all possible user paths, including those that went wrong. The key design question was, "What happens when the user can't interact, can't hear, or can't stay in the app?" Every negative branch has a solution.</p>
     <div class="flow-container fade-in delay-3">
       <!-- Full horizontal flow — expanded viewBox to prevent overlaps -->
       <svg viewBox="0 0 2500 720" xmlns="http://www.w3.org/2000/svg" style="min-width:1600px;width:100%;">
@@ -1482,7 +1471,7 @@
     <span class="section-label fade-in">Design rationale</span>
     <h2 class="section-title fade-in delay-1">Why every decision <span class="glow">matters</span></h2>
     <p class="section-sub fade-in delay-2">Each design choice traces back to a specific research insight.</p>
-    <p class="section-why fade-in delay-2">Good design decisions feel obvious after the fact — but each one here was a deliberate choice made against an easier alternative. The dark background was a temptation to skip. The removal of streaks went against every engagement metric playbook. The wave transition adds time to a flow designed for speed. Each of these choices exists because the research demanded it, not because it was the safe option.</p>
+    <p class="section-why fade-in delay-2">Good design decisions are born from asking questions. Each of these decisions exists because research demanded it. I asked myself if I was always responding to my user and giving them the best experience they needed.</p>
     <div class="dd-grid fade-in delay-3">
       <div class="dd-card">
         <div class="dd-main">One screen = one action</div>
@@ -1597,35 +1586,29 @@
 
     <!-- ACCESSIBILITY -->
     <div class="access-title fade-in">Accessibility — designing for crisis states</div>
-    <p class="access-intro fade-in delay-1">Anxiety episodes affect fine motor control, cognitive load, and visual processing. Every accessibility decision here was made with that context in mind — not as a compliance checklist, but as a direct response to what the research said about how the body behaves during a panic attack.</p>
+    <p class="section-why fade-in delay-1">Anxiety episodes affect fine motor skills, cognitive load, and visual processing. Every accessibility decision was made with this context in mind, as a direct response to research indicating how the body behaves during a panic attack.</p>
     <div class="access-grid fade-in delay-2">
       <div class="access-card">
-        <div class="access-icon">👁</div>
         <div class="access-label">High contrast</div>
         <div class="access-body">Dark navy background with white text meets WCAG AA at all text sizes. Teal (#00BFCA) and Lavender (#99A8F9) maintain 4.5:1+ contrast ratio for key CTAs — readable even with tunnel vision during high anxiety.</div>
       </div>
       <div class="access-card">
-        <div class="access-icon">☝️</div>
         <div class="access-label">Large touch targets</div>
         <div class="access-body">All primary CTAs are minimum 56px tall. During a panic attack, fine motor control degrades — small buttons become impossible. The crisis activation button is intentionally oversized, designed for trembling hands.</div>
       </div>
       <div class="access-card">
-        <div class="access-icon">🔤</div>
         <div class="access-label">Minimal reading load</div>
         <div class="access-body">No screen in the crisis flow requires reading more than 7 words at once. Text size minimum 17px. Short sentences, high line-height. Cognitive load drops sharply during an anxiety spike — the UI absorbs that cost.</div>
       </div>
       <div class="access-card">
-        <div class="access-icon">🔊</div>
         <div class="access-label">Audio + text parallel</div>
         <div class="access-body">Every instruction is delivered via audio AND displayed as text simultaneously. Users in public spaces, with hearing differences, or who can't process audio during a crisis can still follow every step.</div>
       </div>
       <div class="access-card">
-        <div class="access-icon">✋</div>
         <div class="access-label">No gesture-only interactions</div>
         <div class="access-body">The shake gesture and volume shortcut are optional activations — every function is also accessible via tap. Users with motor differences or who are in a context where movement isn't possible aren't locked out.</div>
       </div>
       <div class="access-card">
-        <div class="access-icon">🌙</div>
         <div class="access-label">Night-mode by default</div>
         <div class="access-body">Dark UI is the only mode. Anxiety peaks at night in low-light environments — a bright white screen is physiologically jarring. No toggle needed: the default is already optimized for 3am.</div>
       </div>
@@ -1658,7 +1641,7 @@
     <span class="section-label fade-in">First interaction</span>
     <h2 class="section-title fade-in delay-1">The <span class="glow">Onboarding</span></h2>
     <p class="section-sub fade-in delay-2">Before Nami can help, Nami needs to know you</p>
-    <p class="section-why fade-in delay-2">Most apps dump you into a generic home screen. Nami does something different from the very first second: it listens. The onboarding isn't a tutorial — it's a conversation where Nami learns what makes you anxious, what has helped before, and when you see your therapist. That data becomes the foundation for every interaction that follows. The more Nami knows, the more precise the help when the episode hits.</p>
+    <p class="section-why fade-in delay-2">Most apps take you to a generic home screen. Nami does something different from the very beginning: it listens. The initial setup process isn't a tutorial, but a conversation in which Nami learns what triggers your anxiety, what has helped you before, and when you go to therapy. This information becomes the basis for every subsequent interaction. The more Nami knows, the more precise the support will be.</p>
 
     <div class="onb-flow fade-in delay-3">
 
@@ -1666,7 +1649,7 @@
         <div class="onb-num">01</div>
         <div class="onb-content">
           <div class="onb-step-title">Nami introduces herself</div>
-          <div class="onb-step-body">Not a terms and conditions screen. Not a feature tour. Nami speaks directly to the user in first person: "Hey, I'm Nami. I'm here for the moments when things get hard." Warm, short, zero corporate language. The user's first impression sets the trust foundation everything else is built on.</div>
+          <div class="onb-step-body">Nami addresses the user directly in the first person: "Hi, I'm Nami. I'm here for you during tough times." A warm and concise message. The user's first impression lays the foundation of trust upon which everything else is built.</div>
         </div>
       </div>
 
@@ -1674,7 +1657,7 @@
         <div class="onb-num">02</div>
         <div class="onb-content">
           <div class="onb-step-title">Nami asks your name</div>
-          <div class="onb-step-body">One field. Just your name. From this point on, Nami uses it in every interaction. "Hey, Sofía" instead of "Hey, user." Personalization begins immediately — before any feature is unlocked.</div>
+          <div class="onb-step-body">Just your name. From now on, Nami will use it in every interaction. "Hello, Sofia" instead of "Hello, user." Personalization begins immediately, before you unlock any features.</div>
         </div>
       </div>
 
@@ -1682,7 +1665,7 @@
         <div class="onb-num">03</div>
         <div class="onb-content">
           <div class="onb-step-title">What makes you anxious?</div>
-          <div class="onb-step-body">Nami offers 6–8 common triggers as soft-select chips: exams, social situations, nights alone, health worries, family, uncertainty. The user picks what resonates. These become the context layer that shapes Nami's language and priority responses. Nothing clinical. Nothing overwhelming.</div>
+          <div class="onb-step-body">Nami offers between six and eight common triggers as flexible selection options: exams, social situations, nights alone, health concerns, family, and uncertainty. The user chooses what resonates with them. These elements form the context that shapes Nami's language and prioritized responses.</div>
         </div>
       </div>
 
@@ -1690,7 +1673,7 @@
         <div class="onb-num">04</div>
         <div class="onb-content">
           <div class="onb-step-title">What's helped you before?</div>
-          <div class="onb-step-body">Nami asks what has worked in the past: music, movement, cold water, breathing, calling someone, distraction. This seeds the initial toolkit. The AI doesn't start from zero — it starts from what the user already knows about themselves. The first crisis response will feel familiar, not foreign.</div>
+          <div class="onb-step-body">Nami asks what has worked in the past: music, movement, cold water, breathing, calling someone, distraction. This lays the foundation for the initial set of tools. The AI ​​doesn't start from scratch, but rather from what the user already knows about themselves, so that the first response to a crisis will feel familiar, not strange.</div>
         </div>
       </div>
 
@@ -1698,7 +1681,7 @@
         <div class="onb-num">05</div>
         <div class="onb-content">
           <div class="onb-step-title">When do you see your therapist?</div>
-          <div class="onb-step-body">Day and frequency. Nami sets a recurring check-in for the day after each session: "How did it go today?" Soft, no pressure. This creates the bridge between sessions and gives the user a sense that Nami and their therapist are working together — even though they're not.</div>
+          <div class="onb-step-body">Day and frequency. Nami schedules a follow-up check-in the day after each session: "How did it go today?" Gentle, no pressure. This creates a connection between sessions and gives the client the feeling that Nami and their therapist are working together.</div>
         </div>
       </div>
 
@@ -1706,7 +1689,7 @@
         <div class="onb-num">06</div>
         <div class="onb-content">
           <div class="onb-step-title">Set up the shortcut</div>
-          <div class="onb-step-body">The final onboarding screen walks the user through setting up the widget and shake gesture. Framed not as a setup task but as "your escape hatch." The goal: the user knows before the first episode exactly how to reach Nami in under 3 seconds, without unlocking, searching, or thinking.</div>
+          <div class="onb-step-body">The final welcome screen guides the user through setting up the widget and the shake gesture. It's not presented as a configuration task, but rather as "your escape route." The goal: for the user to know, before the first episode, how to contact Nami in under 3 seconds, without unlocking, searching, or even thinking.</div>
         </div>
       </div>
 
@@ -1714,68 +1697,11 @@
 
     <div class="onb-note fade-in delay-1">
       <div class="onb-note-label">Why this matters</div>
-      <p>Every answer the user gives during onboarding is stored and used. The first time a crisis episode hits, Nami doesn't ask "what's wrong?" — it already knows the user's triggers, their preferred strategies, and their name. The response is immediate and personal. That's the difference between an app that feels like a stranger and one that feels like it knows you.</p>
+      <p>Every answer the user gives during onboarding is stored and used. The first time a crisis episode hits the response is immediate and personal. That's the difference between an app that feels like a stranger and one that feels like it knows you.</p>
     </div>
 
   </div>
 </section>
-
-<!-- ══ AI USAGE ══ -->
-<section id="ai-sec" class="fade-in">
-  <div class="container">
-    <span class="section-label fade-in">Transparency</span>
-    <h2 class="section-title fade-in delay-1">How I worked <span class="glow">with AI</span></h2>
-    <p class="section-sub fade-in delay-2">Not to replace thinking — to accelerate it</p>
-    <div class="ai-cols fade-in delay-3">
-      <div class="glass">
-        <div class="ai-icon">🔍</div>
-        <div class="ai-title">Research synthesis</div>
-        <div class="ai-desc">I used Claude, Gemini, and ChatGPT to find the definition of anxiety from different perspectives, patterns in clinical studies, behavioral research, professional information, and app store reviews. I was asked to identify behavioral differences and understand the best option for my users when anxiety peaks.</div>
-      </div>
-      <div class="glass">
-        <div class="ai-icon">💡</div>
-        <div class="ai-title">Definition &amp; Ideation</div>
-        <div class="ai-desc">I used Claude to generate variations of "How might We...?" questions based on others I had already created, allowing me to expand my ideas during brainstorming sessions while remaining within the user profile constraints. I was asked to argue against each concept from Sofia's perspective: "Would I trust this? Would I delete it?" The decision "not to use the streak system" stemmed directly from this question.</div>
-      </div>
-      <div class="glass">
-        <div class="ai-icon">🎨</div>
-        <div class="ai-title">Visual &amp; brand design</div>
-        <div class="ai-desc">Once I had already developed the concept, user archetype, and name. I used Adobe Firefly to explore the character's visual directions: the translucent, iridescent wave shape emerged from a combination of "sea creature," "crystal," and "ghost friend". <br> After creating the mood board and low-fidelity screens, I asked him to create a prompt so I could transfer it to Google Stitch to see those initial ideas reflected, but it didn't quite achieve the visual result I was looking for. I used Claude to refine the naming system and ensure brand voice consistency across the five states of the application.</div>
-      </div>
-    </div>
-    <div style="max-width:800px;margin:0 auto;" class="fade-in delay-1">
-      <div class="code-lbl">Example prompt — Research synthesis</div>
-      <div class="code-block">"You are a UX researcher reviewing anxiety forum posts, app store reviews for Calm/Headspace/Dare, and clinical literature on CBT digital interventions. Identify the top 3 behavioral patterns users exhibit during an acute anxiety episode that are NOT addressed by current apps. For each pattern, cite the evidence and explain the design implication."</div>
-      <div class="code-lbl">Example prompt — Adversarial persona test</div>
-      <div class="code-block">"You are Sofía: 17 years old, Buenos Aires, anxiety episodes at night before exams. You've deleted 4 mental health apps in the past year. I'm showing you this app concept: [concept description]. You have 30 seconds before you decide to delete it. What annoys you? What makes you stay? Be brutally honest."</div>
-      <div class="code-lbl">Example prompt — Google Stich</div>
-      <div class="code-block">"Design a mobile app UI called Nami — a mental health companion app for teenagers. The main character is a 3D iridescent wave-shaped creature with lavender and teal tones, big black eyes, translucent water-like texture with water droplets.
-        Color palette: deep dark navy backgrounds (#1E2530, #151130), lavender accent (#8B8FD4), teal action color (#00C8C8), white text (#F0F0F0).
-        Visual style: dark mode, glassmorphism cards with frosted blur effect, soft gradient overlays in lavender and teal, fluid wave-like shapes as decorative elements, subtle iridescent glow effects. NO white backgrounds. NO clinical or medical aesthetic.
-        Screen 1 — Home screen: Nami character centered and large, soft glow around her, greeting text "Hey, I've got you." in light weight typography below, one soft glassmorphism card at the bottom with a quick check-in prompt, minimal navigation.
-        Screen 2 — Crisis mode / Storm screen: full dark background, Nami larger and more present, single bold action text instruction in the center ("Press your feet into the floor"), one large teal CTA button at the bottom, no menus, no distractions, audio wave animation behind Nami suggesting she is speaking.
-        Typography: modern, rounded, light weight. Emotional but clean. No serif fonts.
-        Mood reference: Calm, deep, immersive. Like floating underwater at night. The UI should feel like a safe container, not a medical tool."</div>
-      <!-- Google Stitch result -->
-      <div class="stitch-result fade-in delay-2">
-        <div class="stitch-screen-wrap">
-          <!-- Drop your Stitch screenshot here: assets/stitch-result.png -->
-          <img src="assets/stitch-result.png" alt="Google Stitch result" class="stitch-img" onerror="this.parentElement.classList.add('stitch-placeholder')">
-          <div class="stitch-ph-label">[ Stitch screenshot ]<br>Save as assets/stitch-result.png</div>
-        </div>
-        <div class="stitch-commentary">
-          <div class="stitch-commentary-label">What it got right — and what it missed</div>
-          <p class="stitch-commentary-text">
-            <!-- ✏️ Replace this text with your actual commentary about the Stitch result -->
-            El resultado de Stitch analizó bien las instrucciones del prompt y generó una designación system coherente con lo que había expresado — colores, jerarquía tipográfica y el tono visual oscuro estaban alineados. Sin embargo, el resultado visual no alcanzó lo que tenía en mente: la presencia del personaje no tenía la personalidad ni la calidez que Nami necesita para conectar con el usuario en un momento de crisis. Me confirmó que la dirección visual correcta requería decisiones de diseño propias, no generadas.
-          </p>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
 
 <!-- ══ NEXT STEPS ══ -->
 <section id="next-sec">
@@ -1813,6 +1739,58 @@
 
   </div>
 </section>
+
+<!-- ══ AI USAGE ══ -->
+<section id="ai-sec" class="fade-in">
+  <div class="container">
+    <span class="section-label fade-in">Transparency</span>
+    <h2 class="section-title fade-in delay-1">How I worked <span class="glow">with AI</span></h2>
+    <p class="section-sub fade-in delay-2">Not to replace thinking — to accelerate it</p>
+    <div class="ai-cols fade-in delay-3">
+      <div class="glass">
+        <div class="ai-title">Research synthesis</div>
+        <div class="ai-desc">I used Claude, Gemini, and ChatGPT to find the definition of anxiety from different perspectives, patterns in clinical studies, behavioral research, professional information, and app store reviews. I was asked to identify behavioral differences and understand the best option for my users when anxiety peaks.</div>
+      </div>
+      <div class="glass">
+        <div class="ai-title">Definition &amp; Ideation</div>
+        <div class="ai-desc">I used Claude to generate variations of "How might We...?" questions based on others I had already created, allowing me to expand my ideas during brainstorming sessions while remaining within the user profile constraints. I was asked to argue against each concept from Sofia's perspective: "Would I trust this? Would I delete it?" The decision "not to use the streak system" stemmed directly from this question.</div>
+      </div>
+      <div class="glass">
+        <div class="ai-title">Visual &amp; brand design</div>
+        <div class="ai-desc">Once I had already developed the concept, user archetype, and name. I used Adobe Firefly to explore the character's visual directions: the translucent, iridescent wave shape emerged from a combination of "sea creature," "crystal," and "ghost friend". <br> After creating the mood board and low-fidelity screens, I asked him to create a prompt so I could transfer it to Google Stitch to see those initial ideas reflected, but it didn't quite achieve the visual result I was looking for. I used Claude to refine the naming system and ensure brand voice consistency across the five states of the application.</div>
+      </div>
+    </div>
+    <div style="max-width:800px;margin:0 auto;" class="fade-in delay-1">
+      <div class="code-lbl">Example prompt — Research synthesis</div>
+      <div class="code-block">"You are a UX researcher reviewing anxiety forum posts, app store reviews for Calm/Headspace/Dare, and clinical literature on CBT digital interventions. Identify the top 3 behavioral patterns users exhibit during an acute anxiety episode that are NOT addressed by current apps. For each pattern, cite the evidence and explain the design implication."</div>
+      <div class="code-lbl">Example prompt — Adversarial persona test</div>
+      <div class="code-block">"You are Sofía: 17 years old, Buenos Aires, anxiety episodes at night before exams. You've deleted 4 mental health apps in the past year. I'm showing you this app concept: [concept description]. You have 30 seconds before you decide to delete it. What annoys you? What makes you stay? Be brutally honest."</div>
+      <div class="code-lbl">Example prompt — Google Stich</div>
+      <div class="code-block">"Design a mobile app UI called Nami — a mental health companion app for teenagers. The main character is a 3D iridescent wave-shaped creature with lavender and teal tones, big black eyes, translucent water-like texture with water droplets.
+        Color palette: deep dark navy backgrounds (#1E2530, #151130), lavender accent (#8B8FD4), teal action color (#00C8C8), white text (#F0F0F0).
+        Visual style: dark mode, glassmorphism cards with frosted blur effect, soft gradient overlays in lavender and teal, fluid wave-like shapes as decorative elements, subtle iridescent glow effects. NO white backgrounds. NO clinical or medical aesthetic.
+        Screen 1 — Home screen: Nami character centered and large, soft glow around her, greeting text "Hey, I've got you." in light weight typography below, one soft glassmorphism card at the bottom with a quick check-in prompt, minimal navigation.
+        Screen 2 — Crisis mode / Storm screen: full dark background, Nami larger and more present, single bold action text instruction in the center ("Press your feet into the floor"), one large teal CTA button at the bottom, no menus, no distractions, audio wave animation behind Nami suggesting she is speaking.
+        Typography: modern, rounded, light weight. Emotional but clean. No serif fonts.
+        Mood reference: Calm, deep, immersive. Like floating underwater at night. The UI should feel like a safe container, not a medical tool."</div>
+      <!-- Google Stitch result -->
+      <div class="stitch-result fade-in delay-2">
+        <div class="stitch-screen-wrap">
+          <img src="assets/stitch-result.png" alt="Google Stitch result" class="stitch-img" onerror="this.parentElement.classList.add('stitch-placeholder')">
+        </div>
+        <div class="stitch-commentary">
+          <div class="stitch-commentary-label">What it got right — and what it missed</div>
+          <p class="stitch-commentary-text">
+            Stitch's design effectively analyzed the prompt's instructions and generated a consistent system designation that aligned with what I had expressed (colors, typographic hierarchy, and the dark visual tone were all correct). However, the visual result didn't quite achieve what I had envisioned: the character's presence lacked the personality and warmth that Nami needs to connect with the user in a moment of crisis, and it didn't incorporate everything I had planned to create an atmosphere that resonated with the proposed empathetic solution. This confirmed for me that the right visual direction required my own design decisions, not pre-generated ones.          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
 
 <!-- ══ FIGJAM CTA ══ -->
 <section id="figjam-cta" class="fade-in">
