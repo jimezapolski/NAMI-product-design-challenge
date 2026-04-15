@@ -490,6 +490,32 @@
   .btn-cta { display: inline-block; background: #00BFCA; color: #1B1A51; padding: 18px 44px; border-radius: 50px; font-family: inherit; font-size: 16px; font-weight: 500; text-decoration: none; letter-spacing: 0.04em; transition: box-shadow 0.3s, transform 0.2s; }
   .btn-cta:hover { box-shadow: 0 0 44px rgba(0,191,202,0.5); transform: translateY(-3px); }
 
+  /* ── NEXT STEPS ── */
+  #next-sec { background: linear-gradient(180deg, #1B1A51 0%, #151130 100%); }
+  .next-intro { max-width: 620px; color: rgba(240,240,240,0.65); font-size: 17px; line-height: 1.7; margin-bottom: 56px; }
+  .next-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 64px; }
+  .next-card {
+    background: rgba(153,168,249,0.06); border: 1px solid rgba(153,168,249,0.15);
+    border-radius: 18px; padding: 32px 28px; position: relative; overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .next-card:hover { border-color: rgba(153,168,249,0.35); transform: translateY(-4px); }
+  .next-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, #99A8F9, #00BFCA);
+  }
+  .next-step-num { font-size: 11px; letter-spacing: 3px; color: #00BFCA; margin-bottom: 14px; font-weight: 500; }
+  .next-card-title { font-size: 18px; font-weight: 500; color: #F0F0F0; margin-bottom: 12px; line-height: 1.3; }
+  .next-card-body { font-size: 14px; color: rgba(240,240,240,0.55); line-height: 1.7; }
+  .next-vision {
+    background: rgba(0,191,202,0.06); border: 1px solid rgba(0,191,202,0.2);
+    border-radius: 18px; padding: 40px 48px; text-align: center; max-width: 780px; margin: 0 auto;
+  }
+  .next-vision-label { font-size: 11px; letter-spacing: 3px; color: #00BFCA; margin-bottom: 16px; font-weight: 500; }
+  .next-vision-text { font-size: 22px; font-weight: 300; color: #F0F0F0; line-height: 1.6; }
+  .next-vision-text em { color: #99A8F9; font-style: italic; }
+  @media(max-width:768px){ .next-grid { grid-template-columns: 1fr; } .next-vision { padding: 32px 24px; } }
+
   /* ── FOOTER ── */
   footer { background: #1B1A51; border-top: 1px solid rgba(153,168,249,0.15); padding: 30px 52px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
   .ft { font-size: 12px; color: rgba(240,240,240,0.35); }
@@ -743,7 +769,7 @@
       <div class="ins"><div class="ins-n">01</div><div class="ins-t">Users don't want to resolve anxiety. They want to lower the intensity right now — in this moment, before it gets worse.</div></div>
       <div class="ins"><div class="ins-n">02</div><div class="ins-t">Every existing app is built for prevention and habit formation. None is built for the peak of the crisis — the exact moment when the phone gets picked up.</div></div>
       <div class="ins"><div class="ins-n">03</div><div class="ins-t">Breathing exercises can worsen panic attacks. Body-first physical actions — stomping, squeezing, cold water — work better than meditation at peak anxiety.</div></div>
-      <div class="ins"><div class="ins-n">04</div><div class="ins-t">Anxiety happens at night. The context — dark room, racing heart, 3am — demands an aesthetic completely different from what wellness apps offer.</div></div>
+      <div class="ins"><div class="ins-n">04</div><div class="ins-t">In teenagers,anxiety happens at night. The context — dark room, racing heart, 3am — demands an aesthetic completely different from what wellness apps offer.</div></div>
       <div class="ins"><div class="ins-n">05</div><div class="ins-t">The gap between therapy sessions is where most suffering happens — and where no tool currently reaches. That's the real design opportunity.</div></div>
     </div>
 
@@ -1265,7 +1291,7 @@
   <div class="container">
     <span class="section-label fade-in">High fidelity</span>
     <h2 class="section-title fade-in delay-1">The <span class="glow">Design</span></h2>
-    <p class="section-sub fade-in delay-2">Five states. One continuous emotional arc.</p>
+    <p class="section-sub fade-in delay-2">Five states. Nami always present</p>
 
     <div class="screens-row fade-in delay-3">
       <div class="screen-wrap">
@@ -1303,19 +1329,19 @@
     <div class="iter-title fade-in">Iteration history</div>
     <div class="iter-grid fade-in delay-1">
       <div class="glass">
-        <div class="iter-round">Round 1 — Early concept</div>
-        <div class="iter-change">From breathing screen → body-first instructions</div>
-        <div class="iter-why">Initial concept used breathing exercises as the primary crisis intervention. Research and forum data showed this worsens panic for a significant portion of users. Replaced with physical motor actions: stomping, squeezing, shaking hands as if drying them.</div>
+        <div class="iter-round">Decision 1 </div>
+        <div class="iter-change">Crisis screen start</div>
+        <div class="iter-why">The first version suggested that the user speak directly after shaking the app or pressing the volume button for quick access. However, after evaluating it in various contexts, I decided to create a visually large and eye-catching button that the user can press to speak or chat if they are with other people.</div>
       </div>
       <div class="glass">
-        <div class="iter-round">Round 2 — Navigation structure</div>
-        <div class="iter-change">From multi-step menu → one-tap crisis entry</div>
-        <div class="iter-why">First flow required navigating a menu to reach crisis mode. Every additional tap is a failure point during an attack. Moved to shake gesture and home screen widget as primary entry — zero navigation required.</div>
+        <div class="iter-round">Decision 2</div>
+        <div class="iter-change">Mild anxiety home</div>
+        <div class="iter-why">On paper, I had planned three buttons one below the other because it was a manual input and not for use during a panic attack. But after rereading the research and investigating different types of anxiety peaks, I decided to change the differentiation and highlight a button with the action color that communicates a real urgency.</div>
       </div>
       <div class="glass">
-        <div class="iter-round">Round 3 — Tone &amp; gamification</div>
-        <div class="iter-change">From progress streaks → warmth without pressure</div>
-        <div class="iter-why">Early designs included a streak counter and progress rings. User research showed these create guilt when broken — the opposite of the intended effect. Removed all streak mechanics. "You got through it" replaces any score-based system.</div>
+        <div class="iter-round">Decision 3</div>
+        <div class="iter-change">Intermediate screen</div>
+        <div class="iter-why">When the person taps the "I'm not okay right now" button, a micro-moment was missing between The Shore and Still Water. This would help create an app with an emotional differentiator, connect the user with Nami, and help them trust the process.</div>
       </div>
     </div>
   </div>
@@ -1331,17 +1357,17 @@
       <div class="glass">
         <div class="ai-icon">🔍</div>
         <div class="ai-title">Research synthesis</div>
-        <div class="ai-desc">Used Claude to synthesize patterns across clinical studies, behavioral research, and app store reviews. Prompted it to identify the behavioral delta between what users say they want and what they actually do during an anxiety episode. Claude surfaced the "numbing vs. resolving" distinction that became insight #1.</div>
+        <div class="ai-desc">I used Claude, Gemini, and ChatGPT to find the definition of anxiety from different perspectives, patterns in clinical studies, behavioral research, professional information, and app store reviews. I was asked to identify behavioral differences and understand the best option for my users when anxiety peaks.</div>
       </div>
       <div class="glass">
         <div class="ai-icon">💡</div>
-        <div class="ai-title">Ideation &amp; HMW</div>
-        <div class="ai-desc">Used Claude to generate HMW question variations and pressure-test brainstorming ideas against the persona constraints. Asked it to argue against each concept from Sofía's perspective — "would she trust this? Would she delete it?" The "no streak system" decision came directly from this adversarial prompting.</div>
+        <div class="ai-title">Definition &amp; Ideation</div>
+        <div class="ai-desc">I used Claude to generate variations of "How might I...?" questions based on others I had already created, allowing me to expand my ideas during brainstorming sessions while remaining within the user profile constraints. I was asked to argue against each concept from Sofia's perspective: "Would I trust this? Would I delete it?" The decision "not to use the streak system" stemmed directly from this question.</div>
       </div>
       <div class="glass">
         <div class="ai-icon">🎨</div>
         <div class="ai-title">Visual &amp; brand design</div>
-        <div class="ai-desc">Used Adobe Firefly to explore character visual directions — the iridescent translucent ghost form emerged from prompts combining "sea creature," "crystal," and "ghost friend." Google Stitch helped visualize interaction states. Claude refined the naming system and ensured brand voice consistency across all five app states.</div>
+        <div class="ai-desc">Once I had already developed the concept, user archetype, and name. I used Adobe Firefly to explore the character's visual directions: the translucent, iridescent wave shape emerged from a combination of "sea creature," "crystal," and "ghost friend". <br> After creating the mood board and low-fidelity screens, I asked him to create a prompt so I could transfer it to Google Stitch to see those initial ideas reflected, but it didn't quite achieve the visual result I was looking for. I used Claude to refine the naming system and ensure brand voice consistency across the five states of the application.</div>
       </div>
     </div>
     <div style="max-width:800px;margin:0 auto;" class="fade-in delay-1">
@@ -1349,7 +1375,54 @@
       <div class="code-block">"You are a UX researcher reviewing anxiety forum posts, app store reviews for Calm/Headspace/Dare, and clinical literature on CBT digital interventions. Identify the top 3 behavioral patterns users exhibit during an acute anxiety episode that are NOT addressed by current apps. For each pattern, cite the evidence and explain the design implication."</div>
       <div class="code-lbl">Example prompt — Adversarial persona test</div>
       <div class="code-block">"You are Sofía: 17 years old, Buenos Aires, anxiety episodes at night before exams. You've deleted 4 mental health apps in the past year. I'm showing you this app concept: [concept description]. You have 30 seconds before you decide to delete it. What annoys you? What makes you stay? Be brutally honest."</div>
+      <div class="code-lbl">Example prompt — Google Stich</div>
+      <div class="code-block">"Design a mobile app UI called Nami — a mental health companion app for teenagers. The main character is a 3D iridescent wave-shaped creature with lavender and teal tones, big black eyes, translucent water-like texture with water droplets.
+        Color palette: deep dark navy backgrounds (#1E2530, #151130), lavender accent (#8B8FD4), teal action color (#00C8C8), white text (#F0F0F0).
+        Visual style: dark mode, glassmorphism cards with frosted blur effect, soft gradient overlays in lavender and teal, fluid wave-like shapes as decorative elements, subtle iridescent glow effects. NO white backgrounds. NO clinical or medical aesthetic.
+        Screen 1 — Home screen: Nami character centered and large, soft glow around her, greeting text "Hey, I've got you." in light weight typography below, one soft glassmorphism card at the bottom with a quick check-in prompt, minimal navigation.
+        Screen 2 — Crisis mode / Storm screen: full dark background, Nami larger and more present, single bold action text instruction in the center ("Press your feet into the floor"), one large teal CTA button at the bottom, no menus, no distractions, audio wave animation behind Nami suggesting she is speaking.
+        Typography: modern, rounded, light weight. Emotional but clean. No serif fonts.
+        Mood reference: Calm, deep, immersive. Like floating underwater at night. The UI should feel like a safe container, not a medical tool."</div>
+    
     </div>
+  </div>
+</section>
+
+
+<!-- ══ NEXT STEPS ══ -->
+<section id="next-sec">
+  <div class="container">
+    <span class="section-label fade-in">What comes next</span>
+    <h2 class="section-title fade-in delay-1">Next <span class="glow">steps</span></h2>
+    <p class="next-intro fade-in delay-2">Nami resolves the current crisis—but there's a much bigger opportunity: supporting the space between therapy sessions. To get there, the next cycle begins with genuine listening.</p>
+
+    <div class="next-grid">
+
+      <div class="next-card fade-in delay-1">
+        <div class="next-step-num">01 — Testing</div>
+        <div class="next-card-title">Testing with real users</div>
+        <div class="next-card-body">Usability testing sessions with people who are experiencing or have experienced anxiety. The focus: Does Sofia, as a character, inspire trust? Does the crisis flow activate before panic escalates? Is there anything that hinders rather than helps?</div>
+      </div>
+
+      <div class="next-card fade-in delay-2">
+        <div class="next-step-num">02 — CLINICAL RESEARCH</div>
+        <div class="next-card-title">Conversations with therapists</div>
+        <div class="next-card-body">In-depth interviews with psychologists and psychiatrists to understand what happens between sessions: what they record, what they would like to know before each meeting, and what kind of digital support they would consider safe and useful for their patients.</div>
+      </div>
+
+      <div class="next-card fade-in delay-3">
+        <div class="next-step-num">03 — DESIGN ITERATION</div>
+        <div class="next-card-title">Evidence-based redesign</div>
+        <div class="next-card-body">With the lessons learned from testing and interviews, return to the flow and iterate. Prioritize real points of friction over assumed ones. Track each design change against the question: Does this reduce the distance between the difficult moment and help?</div>
+      </div>
+
+    </div>
+
+    <div class="next-vision fade-in delay-2">
+      <div class="next-vision-label">VISION FOR THE FUTURE</div>
+      <p class="next-vision-text">Nami could become the bridge between sessions — where the therapist has real context about how their patient was during the week, and the user feels that the support does not end when they close the office door.</em></p>
+    </div>
+
   </div>
 </section>
 
