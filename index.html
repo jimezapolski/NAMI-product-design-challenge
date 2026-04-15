@@ -123,6 +123,12 @@
     transition: color 0.2s;
   }
   .nav-links a:hover, .nav-links a.active { color: #00BFCA; }
+  .nav-doc-btn {
+    background: rgba(0,191,202,0.12); border: 1px solid rgba(0,191,202,0.35);
+    border-radius: 20px; padding: 6px 16px !important; color: #00BFCA !important;
+    transition: background 0.2s, box-shadow 0.2s !important;
+  }
+  .nav-doc-btn:hover { background: rgba(0,191,202,0.22) !important; box-shadow: 0 0 18px rgba(0,191,202,0.3); }
   .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
   .hamburger span { display: block; width: 24px; height: 2px; background: #F0F0F0; }
   .mobile-menu {
@@ -716,6 +722,7 @@
   <a href="#design-sec" onclick="closeMob()">Design</a>
   <a href="#screens-sec" onclick="closeMob()">Screens</a>
   <a href="#ai-sec" onclick="closeMob()">AI</a>
+  <a href="#figjam-cta" onclick="closeMob()">Documentation</a>
 </div>
 
 <!-- NAV -->
@@ -729,6 +736,7 @@
     <li><a href="#design-sec">Design</a></li>
     <li><a href="#screens-sec">Screens</a></li>
     <li><a href="#ai-sec">AI</a></li>
+    <li><a href="#figjam-cta" class="nav-doc-btn">Documentation</a></li>
   </ul>
   <button class="hamburger" id="ham"><span></span><span></span><span></span></button>
 </nav>
