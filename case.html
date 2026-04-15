@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nami — Product Design Challenge by Jimena Zapolski</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 300;
+    color: #F0F0F0;
+    overflow-x: hidden;
+    background-color: #1B1A51;
+  }
+
+  /* ── GLOBAL GRADIENT BACKGROUND ── */
+  .page-bg {
+    position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 60% at 15% 30%, rgba(153,168,249,0.09) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 85% 10%, rgba(0,191,202,0.07) 0%, transparent 65%),
+      radial-gradient(ellipse 70% 55% at 60% 85%, rgba(153,168,249,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 5% 75%,  rgba(0,191,202,0.05) 0%, transparent 55%),
+      #1B1A51;
+  }
+
+  /* ── LOADING ── */
+  #loading-screen {
+    position: fixed; inset: 0; z-index: 9999;
+    background: radial-gradient(ellipse 100% 100% at 50% 50%, #23206a 0%, #1B1A51 70%);
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .orb-wrap {
+    position: relative; z-index: 2;
+    animation: orbEntry 0.6s cubic-bezier(.2,.8,.4,1) forwards, orbExit 0.55s 2.1s ease-in forwards;
+    opacity: 0;
+  }
+  @keyframes orbEntry {
+    0%   { opacity: 0; transform: scale(0.6); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes orbExit {
+    0%   { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.15); }
+  }
+  .orb {
+    width: 200px; height: 200px; border-radius: 50%; position: relative; overflow: hidden;
+    background:
+      radial-gradient(circle at 32% 28%, rgba(255,255,255,0.92) 0%, rgba(220,225,255,0.75) 18%, rgba(153,168,249,0.55) 38%, rgba(80,100,200,0.4) 58%, rgba(27,26,81,0.85) 82%);
+    box-shadow:
+      inset -22px -18px 48px rgba(0,191,202,0.35),
+      inset 18px 18px 36px rgba(255,255,255,0.28),
+      0 0 70px rgba(153,168,249,0.45),
+      0 0 140px rgba(0,191,202,0.2),
+      0 0 4px rgba(255,255,255,0.3);
+    animation: orbBreath 2.8s ease-in-out infinite;
+  }
+  @keyframes orbBreath {
+    0%,100% { box-shadow: inset -22px -18px 48px rgba(0,191,202,0.35), inset 18px 18px 36px rgba(255,255,255,0.28), 0 0 70px rgba(153,168,249,0.45), 0 0 140px rgba(0,191,202,0.2); }
+    50%     { box-shadow: inset -22px -18px 48px rgba(0,191,202,0.5),  inset 18px 18px 36px rgba(255,255,255,0.4),  0 0 90px rgba(153,168,249,0.6),  0 0 180px rgba(0,191,202,0.3); }
+  }
+  /* inner highlight circle */
+  .orb::before {
+    content: ''; position: absolute;
+    top: 10%; left: 14%; width: 38%; height: 32%;
+    background: radial-gradient(ellipse at 40% 40%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.2) 60%, transparent 100%);
+    border-radius: 50%; filter: blur(3px);
+  }
+  /* wave stripe */
+  .orb::after {
+    content: ''; position: absolute;
+    left: -15%; top: 48%; width: 130%; height: 18%;
+    background: linear-gradient(90deg, transparent 0%, rgba(0,191,202,0.15) 20%, rgba(0,191,202,0.75) 45%, rgba(153,168,249,0.65) 60%, rgba(0,191,202,0.15) 80%, transparent 100%);
+    transform: rotate(-12deg);
+    filter: blur(5px);
+    animation: stripeSlide 2.4s ease-in-out infinite;
+  }
+  @keyframes stripeSlide {
+    0%   { top: 44%; opacity: 0.65; }
+    50%  { top: 52%; opacity: 1; }
+    100% { top: 44%; opacity: 0.65; }
+  }
+  /* outer soft rim */
+  .orb-rim {
+    position: absolute; inset: -12px; border-radius: 50%;
+    background: transparent;
+    border: 1px solid rgba(153,168,249,0.2);
+    animation: rimPulse 2.4s ease-in-out infinite;
+  }
+  .orb-rim2 {
+    position: absolute; inset: -24px; border-radius: 50%;
+    background: transparent;
+    border: 1px solid rgba(0,191,202,0.08);
+    animation: rimPulse 2.4s 0.3s ease-in-out infinite;
+  }
+  @keyframes rimPulse {
+    0%,100% { transform: scale(1); opacity: 0.6; }
+    50%     { transform: scale(1.04); opacity: 1; }
+  }
+  #loading-screen.out { animation: screenOut 0.5s ease forwards; }
+  @keyframes screenOut { to { opacity: 0; pointer-events: none; } }
+
+  /* ── NAV ── */
+  #main-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 52px;
+    background: rgba(27, 26, 81, 0.55);
+    backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(153,168,249,0.1);
+  }
+  .nav-logo { font-size: 21px; font-weight: 500; color: #fff; text-decoration: none; letter-spacing: 0.06em; }
+  .nav-links { display: flex; gap: 30px; list-style: none; }
+  .nav-links a {
+    color: rgba(240,240,240,0.7); text-decoration: none;
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: #00BFCA; }
+  .nav-doc-btn {
+    background: rgba(0,191,202,0.12); border: 1px solid rgba(0,191,202,0.35);
+    border-radius: 20px; padding: 6px 16px !important; color: #00BFCA !important;
+    transition: background 0.2s, box-shadow 0.2s !important;
+  }
+  .nav-doc-btn:hover { background: rgba(0,191,202,0.22) !important; box-shadow: 0 0 18px rgba(0,191,202,0.3); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: #F0F0F0; }
+  .mobile-menu {
+    display: none; position: fixed; inset: 0;
+    background: rgba(20,18,60,0.97); z-index: 999;
+    flex-direction: column; align-items: center; justify-content: center; gap: 36px;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { color: #F0F0F0; text-decoration: none; font-size: 26px; letter-spacing: 0.1em; transition: color 0.2s; }
+  .mobile-menu a:hover { color: #00BFCA; }
+  .mobile-close { position: absolute; top: 24px; right: 28px; background: none; border: none; color: #F0F0F0; font-size: 28px; cursor: pointer; }
+
+  /* ── SCROLL FADE ── */
+  .fade-in { opacity: 0; transform: translateY(44px); transition: opacity 0.85s cubic-bezier(.4,0,.2,1), transform 0.85s cubic-bezier(.4,0,.2,1); }
+  .fade-in.visible { opacity: 1; transform: none; }
+  .fade-in.delay-1 { transition-delay: 0.1s; }
+  .fade-in.delay-2 { transition-delay: 0.22s; }
+  .fade-in.delay-3 { transition-delay: 0.34s; }
+  .fade-in.delay-4 { transition-delay: 0.46s; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh; position: relative; overflow: hidden;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    text-align: center; padding: 80px 48px 60px;
+  }
+  #particles-canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; display: block; }
+  /* Warm gradient overlay on top of particles */
+  .hero-glow {
+    position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 70% at 50% 55%, rgba(153,168,249,0.12) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 40% at 20% 20%, rgba(0,191,202,0.08) 0%, transparent 55%),
+      radial-gradient(ellipse 45% 35% at 80% 75%, rgba(153,168,249,0.07) 0%, transparent 50%);
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 760px; }
+  .hero-title {
+    font-size: clamp(48px, 8vw, 80px); font-weight: 700; color: #fff;
+    letter-spacing: 0.04em; line-height: 1; margin-bottom: 10px;
+    text-shadow: 0 0 80px rgba(153,168,249,0.3), 0 0 160px rgba(0,191,202,0.15);
+  }
+  .hero-sub {
+    font-size: clamp(16px, 2.5vw, 26px); color: #99A8F9; font-weight: 300;
+    margin-bottom: 10px; letter-spacing: 0.02em; font-style: italic;
+  }
+  .hero-body {
+    font-size: 11px; color: rgba(240,240,240,0.45); letter-spacing: 0.14em;
+    text-transform: uppercase; margin-bottom: 28px;
+  }
+  .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
+/* ── HERO INSIGHTS ── */
+#hero-insights {
+  margin-top: 24px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+
+.hero-card {
+  background: rgba(153,168,249,0.06);
+  border: 1px solid rgba(153,168,249,0.15);
+  border-radius: 16px;
+  padding: 24px 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-card:hover {
+  border-color: rgba(153,168,249,0.35);
+  transform: translateY(-4px);
+}
+
+.hero-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #99A8F9, #00BFCA);
+}
+
+.hero-step-num {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #00BFCA;
+  margin-bottom: 10px;
+}
+
+.hero-card-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: #F0F0F0;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.hero-card-body {
+  font-size: 13px;
+  color: rgba(240,240,240,0.6);
+  line-height: 1.6;
+}
+
+  .hero-explore { margin-top: 40px; text-align: center; }
+
+/* responsive */
+@media(max-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media(max-width: 640px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+}
+  /* Buttons */
+  .btn-teal {
+    background: #00BFCA; color: #1B1A51;
+    border: none; padding: 14px 30px; border-radius: 50px;
+    font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer;
+    text-decoration: none; display: inline-block;
+    transition: box-shadow 0.3s, transform 0.2s;
+  }
+  .btn-teal:hover { box-shadow: 0 0 28px rgba(0,191,202,0.55); transform: translateY(-2px); }
+  .btn-outline {
+    background: transparent; color: #99A8F9;
+    border: 1.5px solid rgba(153,168,249,0.5); padding: 14px 30px; border-radius: 50px;
+    font-family: inherit; font-size: 14px; font-weight: 300; cursor: pointer;
+    text-decoration: none; display: inline-block;
+    transition: box-shadow 0.3s, transform 0.2s, border-color 0.2s;
+  }
+  .btn-outline:hover { box-shadow: 0 0 24px rgba(153,168,249,0.35); border-color: #99A8F9; transform: translateY(-2px); }
+
+  .hero-character {
+    width: 100px; height: 120px; margin: 0 auto;
+    background: radial-gradient(ellipse at center, rgba(153,168,249,0.12) 0%, rgba(0,191,202,0.06) 50%, transparent 75%);
+    border-radius: 50% 50% 40% 40%;
+    border: 1.5px dashed rgba(153,168,249,0.25);
+    display: flex; align-items: center; justify-content: center;
+    animation: floatChar 7s ease-in-out infinite;
+    color: rgba(240,240,240,0.25); font-size: 12px; letter-spacing: 0.08em; text-align: center; padding: 20px;
+    box-shadow: 0 0 60px rgba(153,168,249,0.1), 0 0 120px rgba(0,191,202,0.06);
+  }
+  @keyframes floatChar { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+  /* ── WAVE DIVIDER ── */
+  .wave-sep { display: block; width: 100%; overflow: hidden; line-height: 0; }
+  .wave-sep svg { display: block; }
+
+  /* ── SECTIONS ── */
+  section { width: 100%; padding: 100px 52px; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  .section-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #00BFCA; margin-bottom: 14px; display: block; }
+  .section-why { max-width: 760px; font-size: 15px; color: rgba(240,240,240,0.5); line-height: 1.8; margin-bottom: 48px; border-left: 2px solid rgba(0,191,202,0.3); padding-left: 20px; font-style: italic; }
+  .section-title {
+    font-size: clamp(34px, 5vw, 58px); font-weight: 300; color: #fff;
+    margin-bottom: 14px; line-height: 1.1;
+  }
+  .section-title .glow { text-shadow: 0 0 40px rgba(153,168,249,0.4); }
+  .section-sub { font-size: 17px; color: #99A8F9; font-weight: 300; margin-bottom: 56px; max-width: 640px; line-height: 1.7; }
+
+  /* ── GLASS ── */
+  .glass {
+    background: rgba(153,168,249,0.055);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(153,168,249,0.14);
+    border-radius: 20px; padding: 36px;
+    transition: box-shadow 0.3s, border-color 0.3s;
+  }
+  .glass:hover { border-color: rgba(153,168,249,0.3); box-shadow: 0 8px 48px rgba(153,168,249,0.08); }
+  .glass-teal {
+    background: rgba(0,191,202,0.055);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0,191,202,0.15);
+    border-radius: 20px; padding: 36px;
+  }
+
+  /* ── BRIEF ── */
+  .brief-text { font-size: 20px; line-height: 1.85; color: #F0F0F0; font-style: italic; }
+  .brief-text em { color: #99A8F9; font-style: normal; }
+
+  /* ── PROCESS ── */
+  .timeline-wrap { overflow-x: auto; padding-bottom: 16px; }
+  .timeline {
+    display: flex; align-items: flex-start; min-width: 860px;
+    position: relative; padding: 40px 0;
+  }
+  .timeline::before {
+    content: ''; position: absolute; top: 66px; left: 5%; right: 5%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(153,168,249,0.3) 20%, rgba(0,191,202,0.3) 50%, rgba(153,168,249,0.3) 80%, transparent);
+    z-index: 0;
+  }
+  .t-step {
+    flex: 1; text-align: center; position: relative; z-index: 1; padding: 0 12px;
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .t-step.appear { opacity: 1; transform: none; }
+  .t-num {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: linear-gradient(135deg, #00BFCA, #99A8F9);
+    color: #1B1A51; display: flex; align-items: center; justify-content: center;
+    font-size: 19px; font-weight: 500; margin: 0 auto 18px;
+    box-shadow: 0 0 24px rgba(0,191,202,0.35);
+  }
+  .t-title { font-size: 15px; font-weight: 500; color: #fff; margin-bottom: 10px; }
+  .t-desc { font-size: 12px; color: rgba(240,240,240,0.55); line-height: 1.65; }
+
+  /* ── RESEARCH ── */
+  .research-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 72px; }
+  .rc-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: #00BFCA; margin-bottom: 20px; }
+  .rc-list { list-style: none; }
+  .rc-list li { font-size: 13.5px; line-height: 1.75; color: rgba(240,240,240,0.82); padding: 9px 0; border-bottom: 1px solid rgba(153,168,249,0.08); }
+  .rc-list li:last-child { border-bottom: none; }
+  .stat { font-size: 34px; font-weight: 500; color: #00BFCA; display: block; margin-bottom: 4px; }
+  .qt { font-style: italic; font-size: 13.5px; line-height: 1.8; color: rgba(240,240,240,0.8); border-left: 3px solid rgba(153,168,249,0.5); padding-left: 16px; margin: 12px 0; }
+
+  /* BENCHMARK TABLE */
+  .bench-wrap { overflow-x: auto; margin-top: 56px; margin-bottom: 16px; }
+  .bench-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .bench-table th {
+    background: rgba(153,168,249,0.12); color: #99A8F9;
+    font-weight: 500; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 14px 18px; text-align: left; border-bottom: 1px solid rgba(153,168,249,0.2);
+  }
+  .bench-table td { padding: 14px 18px; border-bottom: 1px solid rgba(153,168,249,0.07); color: rgba(240,240,240,0.78); line-height: 1.55; vertical-align: top; }
+  .bench-table tr:hover td { background: rgba(153,168,249,0.04); }
+  .bench-table .app-name { color: #fff; font-weight: 500; }
+  .crisis-high { color: #00BFCA; font-weight: 500; }
+  .crisis-med  { color: rgba(240,240,240,0.5); }
+
+  /* INSIGHTS */
+  .insights { max-width: 900px; margin: 0 auto; }
+  .ins {
+    display: flex; align-items: flex-start; gap: 28px;
+    padding: 28px 0; border-bottom: 1px solid rgba(153,168,249,0.1);
+  }
+  .ins-n { font-size: 52px; font-weight: 300; color: rgba(153,168,249,0.2); line-height: 1; flex-shrink: 0; width: 64px; }
+  .ins-t { font-size: 19px; line-height: 1.65; padding-top: 6px; }
+  .ins:nth-child(odd)  .ins-t { color: #F0F0F0; }
+  .ins:nth-child(even) .ins-t { color: #99A8F9; }
+
+  /* ── PERSONA ── */
+  .persona-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 52px; align-items: start; }
+  .p-name { font-size: 52px; font-weight: 300; color: #fff; margin-bottom: 10px; }
+  .p-meta { font-size: 13px; color: rgba(240,240,240,0.45); letter-spacing: 0.07em; margin-bottom: 26px; line-height: 2.1; }
+  .p-quote { font-size: 18px; font-style: italic; color: #99A8F9; line-height: 1.7; margin-bottom: 28px; border-left: 3px solid #00BFCA; padding-left: 20px; }
+  .p-bio { font-size: 13.5px; line-height: 1.95; color: rgba(240,240,240,0.72); }
+  .emp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .emp-card { background: rgba(153,168,249,0.04); border: 1px solid rgba(153,168,249,0.11); border-radius: 14px; padding: 20px; }
+  .emp-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: #00BFCA; margin-bottom: 12px; font-weight: 500; }
+  .emp-card ul { list-style: none; }
+  .emp-card li { font-size: 12px; line-height: 1.65; color: rgba(240,240,240,0.72); padding: 3px 0; }
+
+  /* ── DEFINE ── */
+  #define-sec { text-align: center; }
+  .prob-stmt {
+    font-size: clamp(20px, 2.8vw, 30px); font-weight: 300; color: #F0F0F0;
+    max-width: 820px; margin: 0 auto 72px; line-height: 1.75;
+  }
+  .hmw-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px; text-align: left; max-width: 1200px; margin: 0 auto;
+  }
+  .hmw-card {
+    background: rgba(153,168,249,0.07);
+    border: 1px solid rgba(153,168,249,0.18);
+    border-radius: 16px; padding: 22px 26px;
+    font-size: 15px; color: #99A8F9; line-height: 1.6;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+  }
+  .hmw-card:hover { background: rgba(153,168,249,0.14); box-shadow: 0 6px 32px rgba(153,168,249,0.1); transform: translateY(-3px); }
+
+  /* ── IDEATE ── */
+  .brain-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 14px; margin-bottom: 64px;
+  }
+  .brain-card {
+    background: rgba(139,143,212,0.14); border-radius: 14px; padding: 20px;
+    font-size: 13px; line-height: 1.7; color: rgba(240,240,240,0.85);
+    border: 1px solid rgba(153,168,249,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .brain-card:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(153,168,249,0.12); }
+  .mvp-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .mvp-head { font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 22px; }
+  .mvp-head.g { color: #00BFCA; }
+  .mvp-head.d { color: rgba(240,240,240,0.35); }
+  .mvp-item { padding: 18px; border-radius: 12px; margin-bottom: 10px; font-size: 13px; line-height: 1.7; }
+  .mvp-item.in { background: rgba(0,191,202,0.07); border: 1px solid rgba(0,191,202,0.18); }
+  .mvp-item.in strong { color: #00BFCA; display: block; margin-bottom: 5px; font-weight: 500; }
+  .mvp-item.out { background: transparent; border: 1px solid rgba(240,240,240,0.08); color: rgba(240,240,240,0.55); }
+  .mvp-item.out strong { color: rgba(240,240,240,0.75); display: block; margin-bottom: 5px; font-weight: 500; }
+
+  /* ── USER FLOW ── */
+  #flow-sec .flow-container {
+    overflow-x: auto; padding: 24px 0;
+    scrollbar-width: thin; scrollbar-color: rgba(153,168,249,0.3) transparent;
+  }
+  .flow-legend { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 32px; }
+  .leg { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(240,240,240,0.6); }
+  .leg-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .leg-line { width: 28px; height: 2px; }
+
+  /* ── BRAND ── */
+  .brand-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+  .char-main {
+    width: 100%; aspect-ratio: 3/4; max-width: 340px;
+    background: radial-gradient(ellipse at 50% 40%, rgba(0,191,202,0.18) 0%, rgba(153,168,249,0.1) 40%, transparent 75%);
+    border-radius: 28px; border: 1.5px dashed rgba(153,168,249,0.25);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(240,240,240,0.22); font-size: 13px; letter-spacing: 0.07em; text-align: center; padding: 24px;
+    box-shadow: 0 0 80px rgba(153,168,249,0.1); margin-bottom: 14px;
+  }
+  .char-poses-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(240,240,240,0.4); margin-bottom: 14px; }
+  .char-poses { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .char-pose {
+    aspect-ratio: 3/4; border-radius: 14px; border: 1.5px dashed rgba(153,168,249,0.18);
+    background: rgba(153,168,249,0.05);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; color: rgba(240,240,240,0.25); text-align: center; padding: 6px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .char-pose:hover { border-color: rgba(153,168,249,0.4); background: rgba(153,168,249,0.1); }
+  .brand-story { font-size: 15.5px; line-height: 1.9; color: rgba(240,240,240,0.8); margin-bottom: 24px; }
+  .swatches { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 38px; }
+  .sw { width: 78px; text-align: center; }
+  .sw-circle { width: 52px; height: 52px; border-radius: 50%; margin: 0 auto 8px; border: 1px solid rgba(255,255,255,0.1); }
+  .sw-hex { font-size: 10px; color: rgba(240,240,240,0.45); }
+  .sw-name { font-size: 10px; color: rgba(240,240,240,0.65); margin-top: 3px; }
+  .naming { list-style: none; }
+  .naming li { padding: 15px 0; border-bottom: 1px solid rgba(153,168,249,0.1); }
+  .naming li:last-child { border-bottom: none; }
+  .n-mode { font-size: 13px; color: #00BFCA; letter-spacing: 0.07em; font-weight: 500; margin-bottom: 4px; }
+  .n-desc { font-size: 13px; color: rgba(240,240,240,0.6); line-height: 1.55; }
+
+  /* ── DESIGN DECISIONS ── */
+  .dd-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; }
+  .dd-card {
+    background: rgba(153,168,249,0.05);
+    border: 1px solid rgba(153,168,249,0.12);
+    border-left: 4px solid #99A8F9;
+    border-radius: 0 16px 16px 0; padding: 28px;
+    transition: box-shadow 0.3s, border-color 0.3s;
+  }
+  .dd-card:hover { box-shadow: 0 8px 40px rgba(153,168,249,0.1); border-left-color: #00BFCA; }
+  .dd-main { font-size: 16px; font-weight: 500; color: #fff; margin-bottom: 14px; line-height: 1.4; }
+  .dd-insight { font-size: 12.5px; color: rgba(240,240,240,0.62); line-height: 1.75; margin-bottom: 14px; padding: 12px; background: rgba(0,0,0,0.15); border-radius: 8px; }
+  .dd-hmw { font-size: 11.5px; color: #99A8F9; font-style: italic; line-height: 1.6; }
+
+  /* ── LOFI SCREENS ── */
+  .lofi-grid { display: flex; gap: 48px; justify-content: center; flex-wrap: wrap; margin-bottom: 72px; align-items: flex-start; }
+  .lofi-wrap { flex: 0 0 260px; text-align: left; }
+  .lofi-phone {
+    width: 200px; border-radius: 32px; border: 2px solid rgba(153,168,249,0.25);
+    background: rgba(153,168,249,0.04); padding: 24px 18px; margin: 0 auto 20px;
+    position: relative; min-height: 400px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .lofi-phone--img {
+    padding: 0; min-height: unset; overflow: hidden; background: transparent;
+  }
+  /* .lofi-phone--img::before { display: none; } */
+  .lofi-img {
+    width: 100%; height: auto; display: block; border-radius: 30px;
+  }
+  /* .lofi-phone::before { 
+    content: ''; display: block; width: 60px; height: 8px; border-radius: 4px;
+    background: rgba(153,168,249,0.2); margin: 0 auto 14px;
+  } */
+  .wf-blob { /* central character blob placeholder */
+    width: 90px; height: 90px; border-radius: 50%;
+    background: rgba(153,168,249,0.12); border: 1.5px dashed rgba(153,168,249,0.3);
+    margin: 0 auto 8px;
+  }
+  .wf-line { height: 8px; border-radius: 4px; background: rgba(240,240,240,0.1); }
+  .wf-line.s { width: 60%; margin: 0 auto; }
+  .wf-line.m { width: 80%; margin: 0 auto; }
+  .wf-line.f { width: 100%; }
+  .wf-btn { height: 36px; border-radius: 50px; background: rgba(0,191,202,0.18); border: 1.5px solid rgba(0,191,202,0.35); margin-top: 8px; }
+  .wf-btn.sec { background: transparent; border: 1.5px solid rgba(153,168,249,0.2); margin-top: 4px; }
+  .wf-card { height: 70px; border-radius: 12px; background: rgba(153,168,249,0.08); border: 1px solid rgba(153,168,249,0.15); margin-bottom: 6px; padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+  .wf-timer { height: 28px; border-radius: 6px; background: rgba(153,168,249,0.15); width: 60px; margin: 0 auto; }
+  .lofi-num { width: 28px; height: 28px; border-radius: 50%; background: #00BFCA; color: #1B1A51; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; margin-bottom: 12px; }
+  .lofi-title { font-size: 15px; font-weight: 500; color: #fff; margin-bottom: 8px; }
+  .lofi-note { font-size: 12.5px; color: rgba(240,240,240,0.58); line-height: 1.7; }
+  .lofi-tested { font-size: 11px; color: #00BFCA; margin-top: 10px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+  /* ── SCREENS ── */
+  .screens-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 72px; }
+  .screen-wrap { text-align: center; flex: 0 0 170px; }
+  .screen-phone {
+    width: 152px; height: 290px; border-radius: 26px;
+    border: 1.5px solid rgba(153,168,249,0.22);
+    background: rgba(153,168,249,0.04);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px; position: relative; overflow: hidden;
+    transition: box-shadow 0.3s, border-color 0.3s;
+  }
+  .screen-phone:hover { border-color: rgba(0,191,202,0.4); box-shadow: 0 12px 48px rgba(0,191,202,0.12); }
+  .screen-inner { font-size: 10px; color: rgba(240,240,240,0.28); text-align: center; padding: 10px; letter-spacing: 0.05em; line-height: 1.6; }
+  .sc-name { font-size: 13px; color: #99A8F9; font-weight: 500; margin-bottom: 5px; }
+  .sc-desc { font-size: 11px; color: rgba(240,240,240,0.45); line-height: 1.5; }
+  .figma-btn-wrap { text-align: center; margin-bottom: 80px; }
+  .iter-title { font-size: 24px; font-weight: 300; color: #fff; margin-bottom: 28px; text-align: center; }
+  .iter-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .iter-round { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: #00BFCA; margin-bottom: 10px; }
+  .iter-change { font-size: 14px; font-weight: 500; color: #fff; margin-bottom: 10px; }
+  .iter-why { font-size: 13px; color: rgba(240,240,240,0.58); line-height: 1.7; }
+
+  /* ── AI ── */
+  #ai-sec { background: linear-gradient(180deg, #151130 0%, #1B1A51 100%); }
+  .ai-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-bottom: 52px; }
+  .ai-icon { font-size: 30px; margin-bottom: 14px; }
+  .ai-title { font-size: 16px; font-weight: 500; color: #fff; margin-bottom: 10px; }
+  .ai-desc { font-size: 13px; color: rgba(240,240,240,0.62); line-height: 1.8; }
+  .code-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; color: #99A8F9; margin-bottom: 8px; }
+  .code-block {
+    background: rgba(0,0,0,0.45); border: 1px solid rgba(153,168,249,0.18);
+    border-radius: 12px; padding: 22px;
+    font-family: 'Courier New', monospace; font-size: 12.5px;
+    color: rgba(240,240,240,0.72); line-height: 1.8; margin-bottom: 16px;
+  }
+
+  /* ── STITCH RESULT ── */
+  .stitch-result { display: flex; gap: 40px; align-items: flex-start; margin-top: 40px; padding: 32px; background: rgba(153,168,249,0.04); border: 1px solid rgba(153,168,249,0.12); border-radius: 18px; }
+  .stitch-screen-wrap { flex: 0 0 350px; position: relative; border-radius: 14px; overflow: hidden; border: 1px solid rgba(153,168,249,0.2); }
+  .stitch-img { width: 100%; display: block; border-radius: 14px; }
+  .stitch-screen-wrap.stitch-placeholder .stitch-img { display: none; }
+  .stitch-ph-label {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    text-align: center; font-size: 12px; color: rgba(240,240,240,0.3); line-height: 1.6;
+    background: rgba(153,168,249,0.06); padding: 16px;
+  }
+  .stitch-screen-wrap:not(.stitch-placeholder) .stitch-ph-label { display: none; }
+  .stitch-commentary { flex: 1; }
+  .stitch-commentary-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #99A8F9; margin-bottom: 14px; font-weight: 500; }
+  .stitch-commentary-text { font-size: 14px; color: rgba(240,240,240,0.6); line-height: 1.75; }
+  @media(max-width:768px){ .stitch-result { flex-direction: column; } .stitch-screen-wrap { flex: unset; width: 100%; } }
+
+  /* ── ONBOARDING ── */
+  #onboarding-sec { background: linear-gradient(180deg, #151130 0%, #1B1A51 100%); }
+  .onb-flow { display: flex; flex-direction: column; gap: 0; margin-bottom: 52px; }
+  .onb-step {
+    display: flex; gap: 32px; align-items: flex-start;
+    padding: 28px 0; border-bottom: 1px solid rgba(153,168,249,0.1);
+  }
+  .onb-step:last-child { border-bottom: none; }
+  .onb-num {
+    font-size: 11px; letter-spacing: 3px; color: #00BFCA; font-weight: 500;
+    min-width: 36px; padding-top: 3px;
+  }
+  .onb-content { flex: 1; }
+  .onb-step-title { font-size: 17px; font-weight: 500; color: #F0F0F0; margin-bottom: 8px; }
+  .onb-step-body { font-size: 14px; color: rgba(240,240,240,0.55); line-height: 1.7; }
+  .onb-note {
+    background: rgba(0,191,202,0.06); border: 1px solid rgba(0,191,202,0.2);
+    border-radius: 16px; padding: 32px 36px;
+  }
+  .onb-note-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #00BFCA; margin-bottom: 12px; font-weight: 500; }
+  .onb-note p { font-size: 15px; color: rgba(240,240,240,0.65); line-height: 1.75; }
+  @media(max-width:768px){ .onb-step { flex-direction: column; gap: 8px; } }
+
+  /* ── ACCESSIBILITY ── */
+  .access-title { font-size: 22px; font-weight: 300; color: #fff; margin: 72px 0 12px; }
+  .access-intro { font-size: 14px; color: rgba(240,240,240,0.5); max-width: 760px; line-height: 1.7; margin-bottom: 32px; }
+  .access-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 64px; }
+  .access-card {
+    background: rgba(153,168,249,0.05); border: 1px solid rgba(153,168,249,0.12);
+    border-radius: 14px; padding: 24px 20px;
+  }
+  .access-icon { font-size: 22px; margin-bottom: 10px; }
+  .access-label { font-size: 13px; font-weight: 500; color: #99A8F9; margin-bottom: 8px; letter-spacing: 0.04em; }
+  .access-body { font-size: 13px; color: rgba(240,240,240,0.5); line-height: 1.65; }
+  @media(max-width:768px){ .access-grid { grid-template-columns: 1fr; } }
+
+  /* ── PRIORITIZATION MATRIX ── */
+  .prio-wrap { margin-bottom: 64px; }
+  .prio-y-labels { display: flex; justify-content: space-between; align-items: center; padding: 0 0 6px 44px; }
+  .prio-y-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(240,240,240,0.3); }
+  .prio-body { display: flex; gap: 8px; align-items: stretch; }
+  .prio-x-axis {
+    display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+    width: 36px; flex-shrink: 0; padding: 8px 0;
+  }
+  .prio-x-label {
+    writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg);
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(240,240,240,0.3);
+  }
+  .prio-grid {
+    flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 8px;
+  }
+  .prio-quadrant {
+    background: rgba(153,168,249,0.04); border: 1px solid rgba(153,168,249,0.1);
+    border-radius: 14px; padding: 22px 20px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .prio-quadrant.q-tl { border-color: rgba(153,168,249,0.15); }
+  .prio-quadrant.q-tr { border-color: rgba(0,191,202,0.25); background: rgba(0,191,202,0.05); }
+  .prio-quadrant.q-bl { border-color: rgba(153,168,249,0.08); opacity: 0.75; }
+  .prio-quadrant.q-br { border-color: rgba(153,168,249,0.1); opacity: 0.75; }
+  .prio-qlabel { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(240,240,240,0.3); margin-bottom: 4px; }
+  .prio-chip { display: inline-block; font-size: 12px; padding: 5px 12px; border-radius: 20px; width: fit-content; }
+  .prio-chip.teal { background: rgba(0,191,202,0.15); color: #00BFCA; border: 1px solid rgba(0,191,202,0.3); }
+  .prio-chip.lav  { background: rgba(153,168,249,0.12); color: #99A8F9; border: 1px solid rgba(153,168,249,0.25); }
+  .prio-chip.dim  { background: rgba(240,240,240,0.04); color: rgba(240,240,240,0.4); border: 1px solid rgba(240,240,240,0.1); }
+  @media(max-width:768px){ .prio-grid { grid-template-columns: 1fr; } .prio-x-axis { display: none; } .prio-y-labels { padding-left: 0; } }
+
+  /* ── FIGJAM CTA ── */
+  #figjam-cta { text-align: center; padding: 120px 52px; }
+  .cta-eyebrow { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #00BFCA; margin-bottom: 20px; display: block; }
+  .cta-title { font-size: clamp(34px, 5vw, 54px); font-weight: 300; color: #fff; margin-bottom: 16px; }
+  .cta-sub { font-size: 17px; color: rgba(240,240,240,0.5); margin-bottom: 48px; }
+  .btn-cta { display: inline-block; background: #00BFCA; color: #1B1A51; padding: 18px 44px; border-radius: 50px; font-family: inherit; font-size: 16px; font-weight: 500; text-decoration: none; letter-spacing: 0.04em; transition: box-shadow 0.3s, transform 0.2s; }
+  .btn-cta:hover { box-shadow: 0 0 44px rgba(0,191,202,0.5); transform: translateY(-3px); }
+
+  /* ── NEXT STEPS ── */
+  #next-sec { background: linear-gradient(180deg, #1B1A51 0%, #151130 100%); }
+  .next-intro { max-width: 620px; color: rgba(240,240,240,0.65); font-size: 17px; line-height: 1.7; margin-bottom: 56px; }
+  .next-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 64px; }
+  .next-card {
+    background: rgba(153,168,249,0.06); border: 1px solid rgba(153,168,249,0.15);
+    border-radius: 18px; padding: 32px 28px; position: relative; overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .next-card:hover { border-color: rgba(153,168,249,0.35); transform: translateY(-4px); }
+  .next-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, #99A8F9, #00BFCA);
+  }
+  .next-step-num { font-size: 11px; letter-spacing: 3px; color: #00BFCA; margin-bottom: 14px; font-weight: 500; }
+  .next-card-title { font-size: 18px; font-weight: 500; color: #F0F0F0; margin-bottom: 12px; line-height: 1.3; }
+  .next-card-body { font-size: 14px; color: rgba(240,240,240,0.55); line-height: 1.7; }
+  .next-vision {
+    background: rgba(0,191,202,0.06); border: 1px solid rgba(0,191,202,0.2);
+    border-radius: 18px; padding: 40px 48px; text-align: center; max-width: 780px; margin: 0 auto;
+  }
+  .next-vision-label { font-size: 11px; letter-spacing: 3px; color: #00BFCA; margin-bottom: 16px; font-weight: 500; }
+  .next-vision-text { font-size: 22px; font-weight: 300; color: #F0F0F0; line-height: 1.6; }
+  .next-vision-text em { color: #99A8F9; font-style: italic; }
+  @media(max-width:768px){ .next-grid { grid-template-columns: 1fr; } .next-vision { padding: 32px 24px; } }
+
+  /* ── FOOTER ── */
+  footer { background: #1B1A51; border-top: 1px solid rgba(153,168,249,0.15); padding: 30px 52px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
+  .ft { font-size: 12px; color: rgba(240,240,240,0.35); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    section { padding: 80px 24px; }
+    #main-nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .research-grid,.persona-grid,.brand-cols,.mvp-cols,.iter-grid,.ai-cols { grid-template-columns: 1fr; }
+    .emp-grid { grid-template-columns: 1fr; }
+    .screens-row { gap: 12px; }
+    .screen-wrap { flex: 0 0 130px; }
+    .screen-phone { width: 120px; height: 230px; }
+    .char-poses { grid-template-columns: repeat(5, 1fr); }
+    .timeline { flex-direction: column; min-width: unset; }
+    .timeline::before { display: none; }
+    .hmw-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-bg"></div>
+
+<!-- LOADING -->
+<div id="loading-screen">
+  <div class="orb-wrap">
+    <div class="orb-rim2"></div>
+    <div class="orb-rim"></div>
+    <div class="orb"></div>
+  </div>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mob-menu">
+  <button class="mobile-close" id="mob-close">✕</button>
+  <a href="#research" onclick="closeMob()">Research</a>
+  <a href="#define-sec" onclick="closeMob()">Define</a>
+  <a href="#ideate-sec" onclick="closeMob()">Ideate</a>
+  <a href="#flow-sec" onclick="closeMob()">Flow</a>
+  <a href="#design-sec" onclick="closeMob()">Design</a>
+  <a href="#screens-sec" onclick="closeMob()">Screens</a>
+  <a href="#ai-sec" onclick="closeMob()">AI</a>
+  <a href="#figjam-cta" onclick="closeMob()">Documentation</a>
+</div>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="#hero" class="nav-logo">~</a>
+  <ul class="nav-links">
+    <li><a href="#research">Research</a></li>
+    <li><a href="#define-sec">Define</a></li>
+    <li><a href="#ideate-sec">Ideate</a></li>
+    <li><a href="#flow-sec">Flow</a></li>
+    <li><a href="#design-sec">Design</a></li>
+    <li><a href="#screens-sec">Screens</a></li>
+    <li><a href="#ai-sec">AI</a></li>
+    <li><a href="#figjam-cta" class="nav-doc-btn">Documentation</a></li>
+  </ul>
+  <button class="hamburger" id="ham"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ══ PROCESS ══ -->
+<section id="process-sec">
+  <div class="container">
+    <span class="section-label fade-in">Design Thinking</span>
+    <h2 class="section-title fade-in delay-1">The <span class="glow">process</span></h2>
+    <div class="timeline-wrap">
+      <div class="timeline" id="timeline">
+        <div class="t-step" data-delay="0">
+          <div class="t-num">1</div>
+          <div class="t-title">Empathize</div>
+          <div class="t-desc">Deep research into anxiety behavior, clinical data, patient forums, and market gaps — understanding the real problem before designing anything.</div>
+        </div>
+        <div class="t-step" data-delay="120">
+          <div class="t-num">2</div>
+          <div class="t-title">Define</div>
+          <div class="t-desc">Synthesized research into a single problem statement and user persona — Sofía — anchoring every decision in a real human context.</div>
+        </div>
+        <div class="t-step" data-delay="240">
+          <div class="t-num">3</div>
+          <div class="t-title">Ideate</div>
+          <div class="t-desc">Generated 16 HMW questions, ran brainstorming across 20+ concepts, prioritized MVP with clear rationale for in vs. out decisions.</div>
+        </div>
+        <div class="t-step" data-delay="360">
+          <div class="t-num">4</div>
+          <div class="t-title">Prototype</div>
+          <div class="t-desc">Mapped complete user flows — crisis and onboarding — defined the naming system for each app state before any visual design.</div>
+        </div>
+        <div class="t-step" data-delay="480">
+          <div class="t-num">5</div>
+          <div class="t-title">Design</div>
+          <div class="t-desc">Built brand identity, character, and five high-fidelity screens. Every visual decision traces back to a specific research insight.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wave-sep"><svg viewBox="0 0 1440 70" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="height:90px;"><path d="M0,20 C360,70 720,0 1080,40 C1260,55 1380,18 1440,28 L1440,70 L0,70 Z" fill="rgba(153,168,249,0.04)"/></svg></div>
+
+<!-- ══ RESEARCH ══ -->
+<section id="research">
+  <div class="container">
+    <span class="section-label fade-in">Empathize</span>
+    <h2 class="section-title fade-in delay-1"><span class="glow">Research</span></h2>
+    <p class="section-sub fade-in delay-2">Understanding the real problem before designing the solution</p>
+    <p class="section-why fade-in delay-2">Before designing, I needed to understand what actually happens in the body and mind during an anxiety episode, not what wellness apps assume happens. I spent time comparing clinical studies, app store reviews, and Reddit forums where real people write about their experiences. The gap between what the research shows and what the products offer was the real challenge.</p>
+
+    <div class="research-grid">
+      <!-- Card 1 -->
+      <div class="glass fade-in">
+        <div class="rc-label">Professional data &amp; reports</div>
+        <ul class="rc-list">
+          <li><span class="stat">359M</span>people worldwide had an anxiety disorder in 2021 — the most common mental disorder. Only 1 in 4 who need treatment receive it.</li>
+          <li>In low-income countries, less than 10% receive care vs. more than 50% in high-income countries.</li>
+          <li><span class="stat">+52%</span>increase in anxiety disorders aged 10–24 between 1990 and 2021 — significant peak after 2019.</li>
+          <li>Therapy usually occurs once every 1–2 weeks, leaving long periods without professional support.</li>
+          <li>Digital CBT interventions can reduce anxiety symptoms by <strong>30–50%</strong> — but less effective during acute crisis when adherence drops.</li>
+          <li>AI-powered tools reduce symptoms by 30–50%, best as complement to care — not replacement.</li>
+          <li style="color:#00BFCA;"><em>"The problem is not just the anxiety — it's the lack of support in the 'in-between'."</em></li>
+        </ul>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="glass fade-in delay-1">
+        <div class="rc-label">Actual user behavior during an episode</div>
+        <ul class="rc-list">
+          <li>Seek to isolate or escape the triggering environment.</li>
+          <li><strong>Numbing via doomscrolling</strong> — TikTok, Instagram, or repetitive games (Candy Crush, Tetris) to saturate the senses and "turn off" intrusive thoughts.</li>
+          <li>Call or write to someone they trust.</li>
+          <li><strong>Symptom checking</strong> — Googling palpitations or shortness of breath to rule out heart attack.</li>
+          <li>Try therapy techniques but under high cognitive activation they <strong>forget them or can't perform them alone.</strong></li>
+          <li>Physical instinct: pacing, cold water on face, squeezing objects, music, avoidance.</li>
+          <li style="color:#00BFCA;font-weight:500;">Key: The person is not looking to "resolve the anxiety." They want to lower the intensity NOW.</li>
+        </ul>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="glass fade-in delay-2">
+        <div class="rc-label">Patient's voice — forums &amp; reviews</div>
+        <p class="qt">"I hate when apps tell me 'close your eyes and focus on your breathing.' If I focus on how I'm breathing, I realize I'm short of breath and the panic attack gets a thousand times worse. I need to open my eyes and look at something."</p>
+        <p class="qt">"Guided meditations are great for Tuesday afternoons when I'm a bit stressed. At 3 a.m., when my heart is racing at 140 bpm, hearing birds and bells makes me feel like the app is mocking me."</p>
+        <p class="qt">"Sometimes I feel overwhelmed out of nowhere and I don't know what to do in that moment."</p>
+        <p class="qt">"The most cited problem across all apps is memory. Users record everything, and the next day the AI has forgotten the most important detail. That's not just a technical bug — it's an emotional breakdown."</p>
+        <p class="qt">"I've tried apps before, but they feel too generic — like they don't really get me."</p>
+        <p class="qt">"When I'm anxious, I don't have the energy to read or go through complex steps."</p>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="glass fade-in delay-3">
+        <div class="rc-label">Market gaps</div>
+        <ul class="rc-list">
+          <li><strong>Interface friction:</strong> Most apps require unlocking, searching, waiting for splash screen, ignoring promotions — before reaching help. During a panic attack, users don't have fine motor control or patience.</li>
+          <li><strong>Designed for prevention, not crisis:</strong> Calm and Headspace require menu navigation, content selection, mental clarity — exactly what disappears during a panic attack.</li>
+          <li><strong>No "No-Look" design:</strong> Forces reading text blocks or tapping small buttons — ignores tunnel vision and hand tremors typical of acute anxiety.</li>
+          <li><strong>No crisis level detection:</strong> No distinction between mild anxiety vs. acute attack.</li>
+          <li><strong>Passive-only approach:</strong> Assumes stillness = relief. Many users need to release adrenaline through gross motor movement first.</li>
+          <li><strong>Too much choice:</strong> "Choose from 50 meditations." The user needs: 1 button that provides relief.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- BENCHMARK TABLE -->
+    <h3 class="fade-in" style="font-size:22px;font-weight:300;color:#fff;margin-bottom:24px;">Benchmark analysis</h3>
+    <div class="bench-wrap fade-in delay-1">
+      <table class="bench-table">
+        <thead>
+          <tr>
+            <th>App</th>
+            <th>Value Proposition</th>
+            <th>Content</th>
+            <th>Crisis Use</th>
+            <th>UX Friction</th>
+            <th>Visual System</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="app-name">Calm</td>
+            <td>Multisensory relaxation (sleep + wellness)</td>
+            <td>Meditations, music and sleep stories</td>
+            <td class="crisis-med">Medium — too much content, hard to choose quickly</td>
+            <td class="crisis-med">Overwhelming options</td>
+            <td>Nature imagery (mountains, water, rain). Blues, greens.</td>
+          </tr>
+          <tr>
+            <td class="app-name">Headspace</td>
+            <td>Learn meditation step-by-step</td>
+            <td>Structured courses + short sessions</td>
+            <td class="crisis-med">Low — not designed for acute anxiety spikes</td>
+            <td class="crisis-med">Medium</td>
+            <td>Friendly illustrations &amp; animations. Yellow/orange palette.</td>
+          </tr>
+          <tr>
+            <td class="app-name">Dare</td>
+            <td>Direct anxiety &amp; panic attack support</td>
+            <td>Audio guidance, CBT-based coaching</td>
+            <td class="crisis-high">High — designed for real-time anxiety</td>
+            <td class="crisis-high">Fast and direct</td>
+            <td>Simple illustrations, clear CTAs (e.g. "SOS"). Violets, blues.</td>
+          </tr>
+          <tr>
+            <td class="app-name">MindShift CBT</td>
+            <td>Structured CBT-based self-help</td>
+            <td>Thought tools, journaling, tracking</td>
+            <td class="crisis-med">Medium — helpful but requires cognitive effort</td>
+            <td class="crisis-med">Medium</td>
+            <td>Action cards (journaling, reframing). Blues, violets.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 5 KEY INSIGHTS -->
+    <h3 class="fade-in" style="font-size:22px;font-weight:300;color:#fff;margin:72px 0 40px;text-align:center;letter-spacing:0.04em;">5 key insights</h3>
+    <div class="insights fade-in delay-1">
+      <div class="ins"><div class="ins-n">01</div><div class="ins-t">Users don't want to resolve anxiety. They want to lower the intensity right now — in this moment, before it gets worse.</div></div>
+      <div class="ins"><div class="ins-n">02</div><div class="ins-t">Every existing app is built for prevention and habit formation. None is built for the peak of the crisis — the exact moment when the phone gets picked up.</div></div>
+      <div class="ins"><div class="ins-n">03</div><div class="ins-t">Breathing exercises can worsen panic attacks. Body-first physical actions — stomping, squeezing, cold water — work better than meditation at peak anxiety.</div></div>
+      <div class="ins"><div class="ins-n">04</div><div class="ins-t">In teenagers,anxiety happens at night. The context — dark room, racing heart, 3am — demands an aesthetic completely different from what wellness apps offer.</div></div>
+      <div class="ins"><div class="ins-n">05</div><div class="ins-t">The gap between therapy sessions is where most suffering happens — and where no tool currently reaches. That's the real design opportunity.</div></div>
+    </div>
+
+  
+  </div>
+</section>
+
+<div class="wave-sep"><svg viewBox="0 0 1440 70" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="height:90px;"><path d="M0,50 C360,0 720,70 1080,20 C1260,0 1380,55 1440,40 L1440,70 L0,70 Z" fill="rgba(153,168,249,0.04)"/></svg></div>
+
+<!-- ══ PERSONA ══ -->
+<section id="persona-sec">
+  <div class="container">
+    <span class="section-label fade-in">User persona</span>
+    <h2 class="section-title fade-in delay-1">Meet <span class="glow">Sofía</span></h2>
+    <p class="section-why fade-in delay-2">After analyzing all the research, I needed a human persona on which to base the design. Like a portrait of real behavior: exact phone habits, specific internal dialogue, what happens to their generation.</p>
+    <div class="glass persona-grid fade-in delay-2">
+      <div>
+        <div class="p-name">Sofía</div>
+        <div class="p-meta">
+          16 years old<br>
+          High school senior — Buenos Aires<br>
+          Lives with parents and younger brother<br>
+          Therapy every two weeks
+        </div>
+        <p class="p-quote">"My therapist taught me techniques but right now I can't remember any of them."</p>
+        <p class="p-bio">
+          Sofía's phone is the first thing she touches in the morning and the last thing she sees at night. She lives on TikTok, Instagram, and WhatsApp. She uses Spotify to regulate her mood — playlists for studying, for crying, for feeling better. Anxiety episodes mainly before exams, in social situations, and at night when she can't turn off her thoughts.
+          <br><br>
+          Gen Z. Mental health is not taboo — she talks about anxiety, therapy, and emotional burnout naturally, in memes, in TikTok comments, in group chats. She knows the vocabulary: nervous system, triggers, grounding. But when the moment hits, the tools available don't match how she actually behaves.
+          <br><br>
+          She distrusts anything that feels corporate or clinical. She trusts things that feel honest, a little imperfect, and human. She'll give an app one chance — if it doesn't get her in the first 30 seconds, it's gone.
+        </p>
+      </div>
+      <div class="emp-grid">
+        <div class="emp-card">
+          <div class="emp-lbl">Thinks &amp; Feels</div>
+          <ul>
+            <li>"I shouldn't feel this way, my problems aren't serious"</li>
+            <li>"Is this normal or am I going crazy?"</li>
+            <li>"I want someone to understand me but not worry my parents"</li>
+            <li>"I can't remember any of the techniques right now"</li>
+            <li>Ashamed of showing vulnerability in front of friends</li>
+            <li>Fear of losing control in public</li>
+          </ul>
+        </div>
+        <div class="emp-card">
+          <div class="emp-lbl">Sees</div>
+          <ul>
+            <li>TikTok "self-care" content that feels performative</li>
+            <li>Meditation apps designed for 35-year-old adults doing yoga</li>
+            <li>Her therapist only every two weeks — an eternity</li>
+          </ul>
+        </div>
+        <div class="emp-card">
+          <div class="emp-lbl">Says &amp; Does</div>
+          <ul>
+            <li>Opens phone impulsively when she feels an episode coming</li>
+            <li>Doomscrolls to "turn off" thoughts</li>
+            <li>Says "I'm fine" even when she's not</li>
+            <li>Cancels plans. Splashes cold water. Googles symptoms.</li>
+          </ul>
+        </div>
+        <div class="emp-card">
+          <div class="emp-lbl">Hears</div>
+          <ul>
+            <li>"I get nervous before exams too" — unintentional minimization</li>
+            <li>"Try meditating" — can't execute in the moment</li>
+            <li>"Just breathe, it'll pass" — from her parents</li>
+            <li>App notifications reminding her she missed meditation — adds guilt</li>
+          </ul>
+        </div>
+        <div class="emp-card" style="border-color:rgba(248,113,113,0.2);">
+          <div class="emp-lbl" style="color:#f87171;">Pains</div>
+          <ul>
+            <li>Too much friction — too many taps before reaching help</li>
+            <li>Apps don't know her, start from zero every time</li>
+            <li>Guided breathing worsens panic</li>
+            <li>No one to talk to at 3am</li>
+            <li>Guilt when she breaks a streak</li>
+          </ul>
+        </div>
+        <div class="emp-card" style="border-color:rgba(0,191,202,0.2);">
+          <div class="emp-lbl" style="color:#00BFCA;">Gains</div>
+          <ul>
+            <li>Something that guides without requiring thinking</li>
+            <li>Warm, like a friend — not a doctor</li>
+            <li>Log what happened for her therapist</li>
+            <li>Not alone in the hardest moment, even at 3am</li>
+            <li>One voice, one step, one action</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ DEFINE ══ -->
+<section id="define-sec">
+  <div class="container" style="text-align:center;">
+    <span class="section-label fade-in">Problem Statement</span>
+    <h2 class="section-title fade-in delay-1"><span class="glow">Define</span></h2>
+    <p class="section-why fade-in delay-1" style="max-width:720px;margin:0 auto 32px;">At this stage it was important for me to put the problem into a sentence and make each problem an opportunity for design.</p>
+    <p class="prob-stmt fade-in delay-2">
+      "Guide teenagers in therapy through the peak moment of an anxiety episode, when their learned coping tools feel unreachable and professional support is not available."
+    </p>
+    <div class="hmw-grid fade-in delay-3">
+      <div class="hmw-card">How might we reduce the entry friction to zero so Sofía can access help in under 3 seconds, even when her hands are shaking?</div>
+      <div class="hmw-card">How might we guide her through the first 60 seconds of an episode without requiring her to read, decide, or think?</div>
+      <div class="hmw-card">How might we make her feel like someone is there without requiring another human to be available?</div>
+      <div class="hmw-card">How might we reflect her progress back to her so she sees she's gotten through episodes before?</div>
+      <div class="hmw-card">How might we differentiate between mild anxiety and an acute episode and respond differently to each?</div>
+      <div class="hmw-card">How might we help her therapist understand what's happening between sessions without extra effort from Sofía?</div>
+      <div class="hmw-card">How might we make her feel like the app and her therapist are working together, not separately?</div>
+      <div class="hmw-card">How might we create a presence that feels warm and human without pretending to be a therapist?</div>
+      <div class="hmw-card">How might we design a character or voice that Gen Z trusts and doesn't find cringe or clinical?</div>
+      <div class="hmw-card">How might we make the app feel like a friend who happens to know exactly what to do?</div>
+      <div class="hmw-card">How might we make daily emotional check-ins feel like something she wants to do, not a chore?</div>
+      <div class="hmw-card">How might we make the between-session journey feel like a game she's winning, not a treatment she's following?</div>
+      <div class="hmw-card">How might we meet her in the exact moment she picks up her phone, before she opens TikTok?</div>
+      <div class="hmw-card">How might we make the first 30 seconds of the experience undeniable so she doesn't delete it?</div>
+      <div class="hmw-card">How might we design for a generation that understands mental health vocabulary but distrusts clinical aesthetics?</div>
+    </div>
+  </div>
+</section>
+
+<div class="wave-sep"><svg viewBox="0 0 1440 70" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="height:90px;"><path d="M0,30 C480,70 960,0 1440,45 L1440,70 L0,70 Z" fill="rgba(153,168,249,0.04)"/></svg></div>
+
+<!-- ══ IDEATE ══ -->
+<section id="ideate-sec">
+  <div class="container">
+    <span class="section-label fade-in">Ideation</span>
+    <h2 class="section-title fade-in delay-1"><span class="glow">Ideate</span></h2>
+    <p class="section-sub fade-in delay-2">20+ concepts, one clear direction.</p>
+    <p class="section-why fade-in delay-2">I allowed myself to generate ideas without filters; every idea that emerged from the research I wrote on the whiteboard. The limitation wasn't creativity, but Sofia: "Would you trust this? Would you delete it?" That question eliminated most of the ideas in the first round. The ones that survived were those that described the exact moment she grabs the phone during an episode.</p>
+    <div class="brain-grid fade-in delay-3">
+      <div class="brain-card">A friendly emotional companion that lives on the home screen — not a bot, not a doctor. A friend.</div>
+      <div class="brain-card">Character changes expression based on the user's mood and evolves visually as the user grows.</div>
+      <div class="brain-card">Character front and center, animated and alive: "Hey, I've got you."</div>
+      <div class="brain-card">Character lives as a shortcut on the home screen. Always one tap away before opening the app.</div>
+      <div class="brain-card">Shake phone or press volume button 3× to activate crisis mode instantly.</div>
+      <div class="brain-card">SOS + smartwatch — detects high heart rate without physical activity, app opens itself automatically.</div>
+      <div class="brain-card">Audio guide with physical actions, not meditation. Short sentences, slow warm voice.</div>
+      <div class="brain-card">Body-first: stomp, squeeze, shake hands as if drying them.</div>
+      <div class="brain-card">One screen = one action. No choices, no reading. If she can't listen — just type.</div>
+      <div class="brain-card">App reads intensity before responding. Adapts to mild anxiety vs. acute episode.</div>
+      <div class="brain-card">Character celebrates: "You got through it. Again." No score, no streak pressure — just warmth.</div>
+      <div class="brain-card">Log saved and ready to share with therapist. She never arrives saying "I don't know, everything's fine."</div>
+      <div class="brain-card">Conversational onboarding — user tells character about triggers, what helps, therapy days. Feeds the AI so every interaction feels personal.</div>
+      <div class="brain-card">Schedule therapy days. Character asks after each session: "How did it go today?" Soft check-in, no pressure.</div>
+      <div class="brain-card">Character talks to her directly on first open, uses her name immediately. Not a tutorial — a conversation.</div>
+    </div>
+
+    <!-- PRIORITIZATION MATRIX -->
+    <h3 style="font-size:22px;font-weight:300;color:#fff;margin:64px 0 8px;" class="fade-in">Prioritization matrix</h3>
+    <p style="font-size:14px;color:rgba(240,240,240,0.45);margin-bottom:32px;" class="fade-in delay-1">Each concept mapped against two variables: impact on the user during an anxiety episode, and urgency to include in the first version.</p>
+    <div class="prio-wrap fade-in delay-2">
+      <!-- top: impact axis labels -->
+      <div class="prio-y-labels">
+        <span class="prio-y-label">← LOW IMPACT</span>
+        <span class="prio-y-label">HIGH IMPACT →</span>
+      </div>
+      <div class="prio-body">
+        <!-- left: urgency axis -->
+        <div class="prio-x-axis">
+          <span class="prio-x-label">HIGH URGENCY</span>
+          <span class="prio-x-label">LOW URGENCY</span>
+        </div>
+        <!-- 2×2 grid -->
+        <div class="prio-grid">
+          <!-- top-left: high urgency, low impact -->
+          <div class="prio-quadrant q-tl">
+            <div class="prio-qlabel">Build now — quick wins</div>
+            <div class="prio-chip lav">Therapy schedule + check-in</div>
+            <div class="prio-chip lav">"After the wave" celebration</div>
+            <div class="prio-chip lav">Switch to chat (audio unavail.)</div>
+          </div>
+          <!-- top-right: high urgency, high impact ★ -->
+          <div class="prio-quadrant q-tr">
+            <div class="prio-qlabel">★ Build now — MVP core</div>
+            <div class="prio-chip teal">No-friction crisis entry</div>
+            <div class="prio-chip teal">Body-first audio guide</div>
+            <div class="prio-chip teal">One screen = one action</div>
+            <div class="prio-chip teal">Character front and center</div>
+            <div class="prio-chip teal">Conversational onboarding</div>
+          </div>
+          <!-- bottom-left: low urgency, low impact -->
+          <div class="prio-quadrant q-bl">
+            <div class="prio-qlabel">Defer — reconsider later</div>
+            <div class="prio-chip dim">Shareable milestone cards</div>
+            <div class="prio-chip dim">Streak / gamification</div>
+            <div class="prio-chip dim">Character visual evolution</div>
+          </div>
+          <!-- bottom-right: low urgency, high impact -->
+          <div class="prio-quadrant q-br">
+            <div class="prio-qlabel">Research first — v2</div>
+            <div class="prio-chip dim">Smartwatch auto-detection</div>
+            <div class="prio-chip dim">Therapist dashboard (B2B)</div>
+            <div class="prio-chip dim">Full long-term AI memory</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-size:22px;font-weight:300;color:#fff;margin-bottom:36px;" class="fade-in">Minimum Viable Product</h3>
+    <div class="mvp-cols fade-in delay-1">
+      <div>
+        <div class="mvp-head g">✓ In the MVP</div>
+        <div class="mvp-item in"><strong>Onboarding — conversational</strong>User tells Nami about themselves: name, triggers, what helps, therapy days. Feeds AI for personalized interactions from day one.</div>
+        <div class="mvp-item in"><strong>Home &amp; character — center stage</strong>Character front and center, animated. App reads intensity. "Hey, I've got you."</div>
+        <div class="mvp-item in"><strong>No-friction crisis entry</strong>Shake phone or volume button 3× → instant crisis mode. One tap from home screen widget.</div>
+        <div class="mvp-item in"><strong>During episode — body-first</strong>Audio guide with physical actions. One screen = one action. Switch to chat if audio unavailable.</div>
+        <div class="mvp-item in"><strong>Therapy schedule</strong>Schedule therapy days. Character checks in after sessions. Saves emotional history.</div>
+        <div class="mvp-item in"><strong>After the wave — celebration &amp; log</strong>"You got through it." Episode log saved and ready for next therapy session.</div>
+      </div>
+      <div>
+        <div class="mvp-head d">Saved for v2</div>
+        <div class="mvp-item out"><strong>Smartwatch integration</strong>Auto-detects high heart rate. Complex hardware dependency — needs core loop validated first.</div>
+        <div class="mvp-item out"><strong>Character visual evolution</strong>Character appearance changes as user progresses. Requires sustained engagement data first.</div>
+        <div class="mvp-item out"><strong>Therapist-facing dashboard</strong>Portal for therapists to view between-session logs. Requires separate B2B research and onboarding.</div>
+        <div class="mvp-item out"><strong>Shareable milestone cards</strong>"I got through 10 episodes" shareable content. Social layer — useful but not core to crisis survival.</div>
+        <div class="mvp-item out"><strong>Full AI long-term memory</strong>Long-term contextual memory across sessions. Engineering complexity — progressive profiling covers core need in MVP.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ USER FLOW ══ -->
+<section id="flow-sec">
+  <div class="container">
+    <span class="section-label fade-in">User flow</span>
+    <h2 class="section-title fade-in delay-1"><span class="glow">User Flow</span></h2>
+    <p class="section-sub fade-in delay-2">Every friction point has a recovery path</p>
+    <p class="section-why fade-in delay-2">Before using Figma, I needed to map out all possible user paths, including those that went wrong. The key design question was, "What happens when the user can't interact, can't hear, or can't stay in the app?" Every negative branch has a solution.</p>
+    <div class="flow-container fade-in delay-3">
+      <!-- Full horizontal flow — expanded viewBox to prevent overlaps -->
+      <svg viewBox="0 0 2500 720" xmlns="http://www.w3.org/2000/svg" style="min-width:1600px;width:100%;">
+        <defs>
+          <marker id="aT" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#00BFCA"/></marker>
+          <marker id="aL" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#99A8F9"/></marker>
+          <marker id="aR" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#f87171"/></marker>
+          <style>.fn{font-family:'Plus Jakarta Sans',sans-serif;}.fb{font-weight:500;}</style>
+        </defs>
+
+        <!-- ─── ZONE LABELS (top) ─── -->
+        <text x="212"  y="42" text-anchor="middle" class="fn" font-size="10" fill="rgba(153,168,249,0.45)" letter-spacing="2">ONBOARDING</text>
+        <text x="1154" y="42" text-anchor="middle" class="fn" font-size="10" fill="rgba(153,168,249,0.45)" letter-spacing="2">HOME</text>
+        <text x="1500" y="42" text-anchor="middle" class="fn" font-size="10" fill="rgba(0,191,202,0.55)"    letter-spacing="2">CRISIS</text>
+        <text x="1850" y="42" text-anchor="middle" class="fn" font-size="10" fill="rgba(0,191,202,0.55)"    letter-spacing="2">EPISODE</text>
+        <text x="2200" y="42" text-anchor="middle" class="fn" font-size="10" fill="rgba(0,191,202,0.55)"    letter-spacing="2">AFTER</text>
+
+        <!-- ─── MAIN HAPPY PATH  y = 220 ─── -->
+
+        <!-- START -->
+        <ellipse cx="60" cy="220" rx="50" ry="26" fill="#00BFCA" opacity="0.9"/>
+        <text x="60" y="225" text-anchor="middle" class="fn fb" font-size="11" fill="#1B1A51">START</text>
+        <line x1="110" y1="220" x2="148" y2="220" stroke="#00BFCA" stroke-width="1.5" marker-end="url(#aT)"/>
+
+        <!-- Onboarding -->
+        <rect x="150" y="197" width="120" height="46" rx="8" fill="rgba(0,191,202,0.1)" stroke="#00BFCA" stroke-width="1.5"/>
+        <text x="210" y="216" text-anchor="middle" class="fn" font-size="10" fill="#F0F0F0">Onboarding</text>
+        <text x="210" y="230" text-anchor="middle" class="fn" font-size="9"  fill="rgba(240,240,240,0.55)">(splash + CTA)</text>
+        <line x1="270" y1="220" x2="308" y2="220" stroke="#00BFCA" stroke-width="1.5" marker-end="url(#aT)"/>
+
+        <!-- Intro parallelogram -->
+        <polygon points="310,197 430,197 418,243 298,243" fill="rgba(0,191,202,0.07)" stroke="#00BFCA" stroke-width="1.5"/>
+        <text x="364" y="215" text-anchor="middle" class="fn" font-size="9.5" fill="#F0F0F0">Introduction</text>
+        <text x="364" y="229" text-anchor="middle" class="fn" font-size="9.5" fill="#F0F0F0">by the user</text>
+        <line x1="430" y1="220" x2="466" y2="220" stroke="#00BFCA" stroke-width="1.5" marker-end="url(#aT)"/>
+
+        <!-- Engages with intro? -->
+        <polygon points="510,185 578,220 510,255 442,220" fill="rgba(153,168,249,0.1)" stroke="#99A8F9" stroke-width="1.5"/>
+        <text x="510" y="216" text-anchor="middle" class="fn" font-size="9" fill="#99A8F9">Engages</text>
+        <text x="510" y="229" text-anchor="middle" class="fn" font-size="9" fill="#99A8F9">with intro?</text>
+
+        <!-- YES → -->
+        <line x1="578" y1="220" x2="614" y2="220" stroke="#00BFCA" stroke-width="1.5" marker-end="url(#aT)"/>
+        <text x="594" y="213" text-anchor="middle" class="fn" font-size="8.5" fill="#00BFCA">YES</text>
+
+        <!-- Character asks -->
+        <rect x="616" y="192" width="132" height="56" rx="8" fill="rgba(0,191,202,0.1)" stroke="#00BFCA" stroke-width="1.5"/>
+        <text x="682" y="211" text-anchor="middle" class="fn" font-size="9.5" fill="#F0F0F0">Character asks:</text>
+        <text x="682" y="224" text-anchor="middle" class="fn" font-size="9"   fill="#99A8F9">name + triggers</text>
+        <text x="682" y="237" text-anchor="middle" class="fn" font-size="9"   fill="#99A8F9">+ therapy days</text>
+        <line x1="748" y1="220" x2="784" y2="220" stroke="#00BFCA" stroke-width="1.5" marker-end="url(#aT)"/>
+
+        <!-- Shares details? -->
+        <polygon points="828,185 896,220 828,255 760,220" fill="rgba(153,168,249,0.1)" stroke="#99A8F9" stroke-width="1.5"/>
+        <text x="828" y="216" text-anchor="middle" class="fn" font-size="9" fill="#99A8F9">Shares</text>
+        <text x="828" y="229" text-anchor="middle" class="fn" font-size="9" fill="#99A8F9">details?</text>
+
+        <!-- YES → Shortcut setup -->
+        <line x1="896" y1="220" x2="932" y2="220" stroke="#00BFCA" stroke-width="1.5" marker-end="url(#aT)"/>
+        <text x="912" y="213" text-anchor="middle" class="fn" font-size="8.5" fill="#00BFCA">YES</text>
+        <rect x="934" y="192" width="132" height="56" rx="8" fill="rgba(0,191,202,0.1)" stroke="#00BFCA" stroke-width="1.5"/>
+        <text x="1000" y="211" text-anchor="middle" class="fn" font-size="9.5" fill="#F0F0F0">Shortcut setup</text>
+        <text x="1000" y="224" text-anchor="middle" class="fn" font-size="9"   fill="#99A8F9">widget + shake</text>
+        <text x="1000" y="237" text-anchor="middle" class="fn" font-size="9"   fill="#99A8F9">gesture</text>
+        <line x1="1066" y1="220" x2="1102" y2="220" stroke="#00BFCA" stroke-width="1.5" marker-end="url(#aT)"/>
+
+        <!-- HOME -->
+        <rect x="1104" y="192" width="104" height="56" rx="8" fill="rgba(153,168,249,0.15)" stroke="#99A8F9" stroke-width="2"/>
+        <text x="1156" y="217" text-anchor="middle" class="fn fb" font-size="13" fill="#F0F0F0">HOME</text>
+        <text x="1156" y="233" text-anchor="middle" class="fn" font-size="9"  fill="rgba(240,240,240,0.5)">"Hey, Sofía"</text>
+
+        <!-- ─── NO "engages" → holds space  y = 370 (well below main path) ─── -->
+        <line x1="510" y1="255" x2="510" y2="360" stroke="#f87171" stroke-width="1.5" marker-end="url(#aR)"/>
+        <text x="522" y="315" class="fn" font-size="8.5" fill="#f87171">NO</text>
+        <rect x="446" y="362" width="130" height="46" rx="8" fill="rgba(248,113,113,0.07)" stroke="#f87171" stroke-width="1.5"/>
+        <text x="511" y="381" text-anchor="middle" class="fn" font-size="9" fill="#F0F0F0">Character holds</text>
+        <text x="511" y="395" text-anchor="middle" class="fn" font-size="9" fill="rgba(240,240,240,0.55)">"I'll be here when ready"</text>
+        <!-- arc to HOME — goes BELOW main path, no overlap -->
+        <path d="M 576,385 Q 840,440 1104,248" stroke="#99A8F9" stroke-width="1.5" fill="none" stroke-dasharray="5,3" marker-end="url(#aL)"/>
+
+        <!-- ─── NO "shares" → Progressive profiling  y = 370 ─── -->
+        <line x1="828" y1="255" x2="828" y2="360" stroke="#f87171" stroke-width="1.5" marker-end="url(#aR)"/>
+        <text x="840" y="315" class="fn" font-size="8.5" fill="#f87171">NO</text>
+        <rect x="762" y="362" width="136" height="46" rx="8" fill="rgba(153,168,249,0.07)" stroke="#99A8F9" stroke-width="1.5"/>
+        <text x="830" y="381" text-anchor="middle" class="fn" font-size="9" fill="#99A8F9">Progressive profiling</text>
+        <text x="830" y="395" text-anchor="middle" class="fn" font-size="9" fill="rgba(240,240,240,0.55)">character learns over time</text>
+        <!-- arc up and back to Shortcut setup -->
+        <path d="M 898,385 Q 960,440 1000,248" stroke="#99A8F9" stroke-width="1.5" fill="none" stroke-dasharray="5,3" marker-end="url(#aL)"/>
+
+        <!-- ─── HOME → How open crisis?  ─── -->
+        <line x1="1208" y1="220" x2="1254" y2="220" stroke="#00BFCA" stroke-width="1.5" marker-end="url(#aT)"/>
+        <polygon points="1300,180 1374,220 1300,260 1226,220" fill="rgba(153,168,249,0.1)" stroke="#99A8F9" stroke-width="1.5"/>
+        <text x="1300" y="212" text-anchor="middle" class="fn" font-size="8.5" fill="#99A8F9">How does she</text>
+        <text x="1300" y="225" text-anchor="middle" class="fn" font-size="8.5" fill="#99A8F9">open crisis</text>
+        <text x="1300" y="238" text-anchor="middle" class="fn" font-size="8.5" fill="#99A8F9">mode?</text>
+
+        <!-- Shake/Volume → Crisis screen (MAIN path) -->
+        <line x1="1374" y1="220" x2="1416" y2="220" stroke="#00BFCA" stroke-width="1.5" marker-end="url(#aT)"/>
+        <text x="1394" y="211" text-anchor="middle" class="fn" font-size="8" fill="#00BFCA">Shake / Vol. / Widget</text>
+
+        <!-- Crisis screen -->
+        <rect x="1418" y="190" width="130" height="60" rx="8" fill="rgba(0,191,202,0.12)" stroke="#00BFCA" stroke-width="2"/>
+        <text x="1483" y="210" text-anchor="middle" class="fn" font-size="9.5" fill="#F0F0F0">Crisis screen</text>
+        <text x="1483" y="224" text-anchor="middle" class="fn" font-size="9"   fill="#00BFCA">"Hey, I've got you"</text>
+        <text x="1483" y="238" text-anchor="middle" class="fn" font-size="9"   fill="rgba(240,240,240,0.45)">The wave transition</text>
+
+        <!-- ─── Manual open → Mild anxiety — TOP path  y = 90 ─── -->
+        <!-- arc up from diamond to mild anxiety box -->
+        <path d="M 1300,180 Q 1300,80 1385,80" stroke="#99A8F9" stroke-width="1.5" fill="none" stroke-dasharray="5,3" marker-end="url(#aL)"/>
+        <text x="1320" y="120" class="fn" font-size="8.5" fill="#99A8F9">Manual open</text>
+        <rect x="1387" y="58" width="128" height="46" rx="8" fill="rgba(153,168,249,0.08)" stroke="rgba(153,168,249,0.3)" stroke-width="1.5"/>
+        <text x="1451" y="77"  text-anchor="middle" class="fn" font-size="9.5" fill="rgba(240,240,240,0.75)">Mild anxiety</text>
+        <text x="1451" y="90"  text-anchor="middle" class="fn" font-size="9"   fill="rgba(240,240,240,0.5)">gentle check-in</text>
+        <text x="1451" y="103" text-anchor="middle" class="fn" font-size="9"   fill="rgba(240,240,240,0.5)">+ progression</text>
+        <line x1="1515" y1="81" x2="1553" y2="81" stroke="#99A8F9" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#aL)"/>
+        <rect x="1555" y="58" width="110" height="46" rx="8" fill="rgba(153,168,249,0.07)" stroke="rgba(153,168,249,0.25)" stroke-width="1.5"/>
+        <text x="1610" y="77"  text-anchor="middle" class="fn" font-size="9.5" fill="rgba(240,240,240,0.7)">Mild anxiety</text>
+        <text x="1610" y="90"  text-anchor="middle" class="fn" font-size="9"   fill="rgba(240,240,240,0.5)">home</text>
+        <text x="1610" y="103" text-anchor="middle" class="fn" font-size="9"   fill="#99A8F9">Select mode</text>
+        <!-- Panic SOS: arc DOWN and right to crisis screen — avoids top row -->
+        <path d="M 1665,81 Q 1700,81 1700,150 Q 1700,192 1680,210" stroke="#f87171" stroke-width="1.5" fill="none" stroke-dasharray="5,3" marker-end="url(#aR)"/>
+        <text x="1710" y="136" class="fn" font-size="8" fill="#f87171">Panic SOS</text>
+
+        <!-- ─── Crisis → Can engage with audio? ─── -->
+        <line x1="1548" y1="220" x2="1590" y2="220" stroke="#00BFCA" stroke-width="1.5" marker-end="url(#aT)"/>
+        <polygon points="1638,183 1710,220 1638,257 1566,220" fill="rgba(153,168,249,0.1)" stroke="#99A8F9" stroke-width="1.5"/>
+        <text x="1638" y="215" text-anchor="middle" class="fn" font-size="8.5" fill="#99A8F9">Can engage</text>
+        <text x="1638" y="228" text-anchor="middle" class="fn" font-size="8.5" fill="#99A8F9">with audio?</text>
+
+        <!-- YES → Audio guide -->
+        <line x1="1710" y1="220" x2="1748" y2="220" stroke="#00BFCA" stroke-width="1.5" marker-end="url(#aT)"/>
+        <text x="1728" y="212" text-anchor="middle" class="fn" font-size="8.5" fill="#00BFCA">YES</text>
+        <rect x="1750" y="190" width="132" height="60" rx="8" fill="rgba(0,191,202,0.1)" stroke="#00BFCA" stroke-width="1.5"/>
+        <text x="1816" y="210" text-anchor="middle" class="fn" font-size="9.5" fill="#F0F0F0">Audio guide</text>
+        <text x="1816" y="223" text-anchor="middle" class="fn" font-size="9"   fill="#99A8F9">Body-first actions</text>
+        <text x="1816" y="236" text-anchor="middle" class="fn" font-size="9"   fill="rgba(240,240,240,0.5)">stomp · squeeze · ground</text>
+
+        <!-- NO → Switch to chat  y = 370 (separate row, no overlap) -->
+        <line x1="1638" y1="257" x2="1638" y2="360" stroke="#f87171" stroke-width="1.5" marker-end="url(#aR)"/>
+        <text x="1650" y="315" class="fn" font-size="8.5" fill="#f87171">NO</text>
+        <rect x="1575" y="362" width="128" height="46" rx="8" fill="rgba(248,113,113,0.07)" stroke="#f87171" stroke-width="1.5"/>
+        <text x="1639" y="381" text-anchor="middle" class="fn" font-size="9" fill="#F0F0F0">Switch to chat</text>
+        <text x="1639" y="395" text-anchor="middle" class="fn" font-size="9" fill="rgba(240,240,240,0.55)">AI text companion</text>
+        <!-- chat → Does first action help (merge back, clear curved path) -->
+        <path d="M 1703,385 Q 1900,440 1920,258" stroke="#99A8F9" stroke-width="1.5" fill="none" stroke-dasharray="5,3" marker-end="url(#aL)"/>
+
+        <!-- ─── Does first action help? ─── -->
+        <line x1="1882" y1="220" x2="1920" y2="220" stroke="#00BFCA" stroke-width="1.5" marker-end="url(#aT)"/>
+        <polygon points="1966,180 2042,220 1966,260 1890,220" fill="rgba(153,168,249,0.1)" stroke="#99A8F9" stroke-width="1.5"/>
+        <text x="1966" y="215" text-anchor="middle" class="fn" font-size="8.5" fill="#99A8F9">Does first</text>
+        <text x="1966" y="228" text-anchor="middle" class="fn" font-size="8.5" fill="#99A8F9">action help?</text>
+
+        <!-- YES → Episode ends -->
+        <line x1="2042" y1="220" x2="2080" y2="220" stroke="#00BFCA" stroke-width="1.5" marker-end="url(#aT)"/>
+        <text x="2060" y="212" text-anchor="middle" class="fn" font-size="8.5" fill="#00BFCA">YES</text>
+        <rect x="2082" y="188" width="134" height="64" rx="8" fill="rgba(0,191,202,0.12)" stroke="#00BFCA" stroke-width="2"/>
+        <text x="2149" y="208" text-anchor="middle" class="fn" font-size="9.5" fill="#F0F0F0">Episode ends</text>
+        <text x="2149" y="222" text-anchor="middle" class="fn" font-size="9"   fill="#00BFCA">Character celebrates</text>
+        <text x="2149" y="236" text-anchor="middle" class="fn" font-size="9"   fill="rgba(240,240,240,0.5)">"You got through it"</text>
+
+        <!-- ─── NO → Character switches strategy  y = 370 ─── -->
+        <line x1="1966" y1="260" x2="1966" y2="360" stroke="#f87171" stroke-width="1.5" marker-end="url(#aR)"/>
+        <text x="1978" y="315" class="fn" font-size="8.5" fill="#f87171">NO</text>
+        <rect x="1900" y="362" width="134" height="46" rx="8" fill="rgba(153,168,249,0.07)" stroke="#99A8F9" stroke-width="1.5"/>
+        <text x="1967" y="381" text-anchor="middle" class="fn" font-size="9" fill="#99A8F9">Character switches</text>
+        <text x="1967" y="395" text-anchor="middle" class="fn" font-size="9" fill="rgba(240,240,240,0.5)">strategy</text>
+
+        <!-- Stays in app? diamond  y = 520 (well below everything) -->
+        <line x1="1967" y1="408" x2="1967" y2="494" stroke="#99A8F9" stroke-width="1.5" marker-end="url(#aL)"/>
+        <polygon points="1967,496 2038,530 1967,564 1896,530" fill="rgba(153,168,249,0.08)" stroke="#99A8F9" stroke-width="1.5"/>
+        <text x="1967" y="525" text-anchor="middle" class="fn" font-size="8.5" fill="#99A8F9">Stays</text>
+        <text x="1967" y="538" text-anchor="middle" class="fn" font-size="8.5" fill="#99A8F9">in app?</text>
+
+        <!-- YES → loop back — outer right arc, clear of all nodes -->
+        <path d="M 2038,530 Q 2180,530 2180,340 Q 2180,220 1882,220" stroke="#00BFCA" stroke-width="1.5" fill="none" stroke-dasharray="5,3" marker-end="url(#aT)"/>
+        <text x="2190" y="400" class="fn" font-size="8.5" fill="#00BFCA">YES</text>
+
+        <!-- NO → Auto-save (far left, y=530) -->
+        <line x1="1896" y1="530" x2="1780" y2="530" stroke="#f87171" stroke-width="1.5" marker-end="url(#aR)"/>
+        <text x="1840" y="522" text-anchor="middle" class="fn" font-size="8.5" fill="#f87171">NO</text>
+        <rect x="1680" y="510" width="100" height="44" rx="8" fill="rgba(248,113,113,0.07)" stroke="#f87171" stroke-width="1.5"/>
+        <text x="1730" y="528" text-anchor="middle" class="fn" font-size="9"  fill="#F0F0F0">Auto-save</text>
+        <text x="1730" y="542" text-anchor="middle" class="fn" font-size="9"  fill="rgba(240,240,240,0.5)">follow-up on next open</text>
+        <!-- auto-save → episode ends: arc up on the right side -->
+        <path d="M 1780,530 Q 1900,580 2082,252" stroke="#99A8F9" stroke-width="1.5" fill="none" stroke-dasharray="5,3" marker-end="url(#aL)"/>
+
+        <!-- ─── Log saved → END ─── -->
+        <line x1="2216" y1="220" x2="2258" y2="220" stroke="#00BFCA" stroke-width="1.5" marker-end="url(#aT)"/>
+        <rect x="2260" y="192" width="112" height="56" rx="8" fill="rgba(0,191,202,0.08)" stroke="#00BFCA" stroke-width="1.5"/>
+        <text x="2316" y="213" text-anchor="middle" class="fn" font-size="9.5" fill="#F0F0F0">Log saved</text>
+        <text x="2316" y="227" text-anchor="middle" class="fn" font-size="9"   fill="rgba(240,240,240,0.5)">Ready for</text>
+        <text x="2316" y="240" text-anchor="middle" class="fn" font-size="9"   fill="rgba(240,240,240,0.5)">therapist</text>
+        <line x1="2372" y1="220" x2="2410" y2="220" stroke="#00BFCA" stroke-width="1.5" marker-end="url(#aT)"/>
+        <ellipse cx="2450" cy="220" rx="46" ry="26" fill="#00BFCA" opacity="0.85"/>
+        <text x="2450" y="225" text-anchor="middle" class="fn fb" font-size="11" fill="#1B1A51">END</text>
+      </svg>
+    </div>
+    <div class="flow-legend fade-in">
+      <div class="leg"><div class="leg-dot" style="background:#00BFCA;"></div>Happy path</div>
+      <div class="leg"><div class="leg-dot" style="background:#f87171;"></div>Friction / resistance</div>
+      <div class="leg"><div class="leg-dot" style="background:#99A8F9;"></div>Recovery path</div>
+      <div class="leg"><div class="leg-line" style="background:rgba(153,168,249,0.4);border-top:2px dashed rgba(153,168,249,0.5);"></div>Optional / alternate</div>
+    </div>
+  </div>
+</section>
+
+<div class="wave-sep"><svg viewBox="0 0 1440 70" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="height:90px;"><path d="M0,45 C360,0 720,70 1080,25 C1260,5 1380,50 1440,35 L1440,70 L0,70 Z" fill="rgba(153,168,249,0.04)"/></svg></div>
+
+<!-- ══ BRAND ══ -->
+<section id="brand-sec">
+  <div class="container">
+    <span class="section-label fade-in">Identity</span>
+    <h2 class="section-title fade-in delay-1">Meet <span class="glow">Nami</span></h2>
+    <div class="brand-cols fade-in delay-2">
+      <div>
+        <!-- [NAMI_CHARACTER] — Main character, large, with glow -->
+        <div class="char-main"><img src="assets/NAMI.png" alt= "nami" width="300px" height="300px"></div>
+        <div class="char-poses-title">Character poses — 10 expressions</div>
+        <div class="char-poses">
+          <!-- [NAMI_POSE_1] through [NAMI_POSE_10] — 10 character expression placeholders -->
+          <div class="char-pose"><img src="assets/NAMI-1.png" alt= "nami" width="100px" height="100px"></div>
+          <div class="char-pose"><img src="assets/NAMI-2.png" alt= "nami" width="100px" height="100px"></div>
+          <div class="char-pose"><img src="assets/NAMI-3.png" alt= "nami" width="100px" height="100px"></div>
+          <div class="char-pose"><img src="assets/NAMI-4.png" alt= "nami" width="100px" height="100px"></div>
+          <div class="char-pose"><img src="assets/NAMI-5.png" alt= "nami" width="100px" height="100px"></div>
+          <div class="char-pose"><img src="assets/NAMI-6.png" alt= "nami" width="100px" height="100px"></div>
+          <div class="char-pose"><img src="assets/NAMI-7.png" alt= "nami" width="100px" height="100px"></div>
+          <div class="char-pose"><img src="assets/NAMI-8.png" alt= "nami" width="100px" height="100px"></div>
+          <div class="char-pose"><img src="assets/NAMI-9.png" alt= "nami" width="100px" height="100px"></div>
+          <div class="char-pose"><img src="assets/NAMI-10.png" alt= "nami" width="100px" height="100px"></div>
+        </div>
+      </div>
+      <div>
+        <p class="brand-story">
+          <strong style="color:#00BFCA;">Nami (波)</strong> Japanese for "wave."<br><br>
+          Anxiety is a wave. You can't stop it. You can't ignore it. But you can learn to ride it. Nami doesn't promise there won't be waves, it promises to be there when they arrive.<br><br>
+          The character shares its name with the app. That makes it more personal, it's not "the app," it's Nami. A friend who happens to know exactly what to do. Warm, direct, and slightly humorous. Not a bot. Not a doctor.
+        </p>
+        <div class="swatches">
+          <div class="sw"><div class="sw-circle" style="background:#1B1A51;"></div><div class="sw-hex">#1B1A51</div><div class="sw-name">Deep Ocean</div></div>
+          <div class="sw"><div class="sw-circle" style="background:#99A8F9;"></div><div class="sw-hex">#99A8F9</div><div class="sw-name">Lavender Wave</div></div>
+          <div class="sw"><div class="sw-circle" style="background:#00BFCA;"></div><div class="sw-hex">#00BFCA</div><div class="sw-name">Foam Teal</div></div>
+          <div class="sw"><div class="sw-circle" style="background:#F0F0F0;"></div><div class="sw-hex">#F0F0F0</div><div class="sw-name">Sea Foam White</div></div>
+          <div class="sw"><div class="sw-circle" style="background:linear-gradient(135deg,#8B8FD4,#00BFCA);"></div><div class="sw-hex">gradient</div><div class="sw-name">Iridescent</div></div>
+        </div>
+        <p style="font-size:12px;color:rgba(240,240,240,0.4);margin-bottom:22px;letter-spacing:0.08em;text-transform:uppercase;">The palette is built around one idea: the ocean at night.</p>
+        <ul class="naming">
+          <li><div class="n-mode">Storm mode</div><div class="n-desc">The crisis entry point. "Hey, I've got you." One screen. One action. No choices.</div></li>
+          <li><div class="n-mode">The Shore</div><div class="n-desc">The calm home. "Hey, Sofía." Quick access to all paths — therapy, check-in, or crisis.</div></li>
+          <li><div class="n-mode">The wave</div><div class="n-desc">Transitional empathy moment. "I'm here, follow me." Emotional bridge before instruction begins.</div></li>
+          <li><div class="n-mode">Still water</div><div class="n-desc">Guided action during episode. "Let's do this together." Body-first, one screen at a time.</div></li>
+          <li><div class="n-mode">After the wave</div><div class="n-desc">Celebration and logging. "You got through it." Episode saved, ready for therapy.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ DESIGN DECISIONS ══ -->
+<section id="design-sec">
+  <div class="container">
+    <span class="section-label fade-in">Design rationale</span>
+    <h2 class="section-title fade-in delay-1">Why every decision <span class="glow">matters</span></h2>
+    <p class="section-sub fade-in delay-2">Each design choice traces back to a specific research insight.</p>
+    <p class="section-why fade-in delay-2">Good design decisions are born from asking questions. Each of these decisions exists because research demanded it. I asked myself if I was always responding to my user and giving them the best experience they needed.</p>
+    <div class="dd-grid fade-in delay-3">
+      <div class="dd-card">
+        <div class="dd-main">One screen = one action</div>
+        <div class="dd-insight">Under high cognitive activation during an anxiety episode, users forget learned techniques and cannot perform multi-step tasks alone. Fine motor control degrades. Zero decisions at peak panic.</div>
+        <div class="dd-hmw">Resolves: "How might we guide her through the first 60 seconds without requiring her to read, decide, or think?"</div>
+      </div>
+      <div class="dd-card">
+        <div class="dd-main">Body-first instructions, not meditation</div>
+        <div class="dd-insight">"If I focus on how I'm breathing, I realize I'm short of breath and the panic attack gets a thousand times worse." Clinical evidence confirms breathing exercises can worsen panic attacks. Physical gross motor actions — stomping, squeezing, shaking — come first.</div>
+        <div class="dd-hmw">Resolves: "How might we reduce entry friction to zero so Sofía can access help in under 3 seconds?"</div>
+      </div>
+      <div class="dd-card">
+        <div class="dd-main">Dark background — deep navy, not clinical white</div>
+        <div class="dd-insight">"At 3 a.m., when my heart is racing at 140 bpm, hearing birds and bells makes me feel like the app is mocking me." Anxiety peaks at night. A bright morning aesthetic signals the wrong emotional register entirely.</div>
+        <div class="dd-hmw">Resolves: "How might we design for a generation that understands mental health but distrusts clinical aesthetics?"</div>
+      </div>
+      <div class="dd-card">
+        <div class="dd-main">No streak system, no score, no progress bar</div>
+        <div class="dd-insight">App notifications reminding Sofía she missed her meditation add guilt — not motivation. A streak system turns recovery into something she can fail at. Guilt is the last emotion an anxious teenager needs.</div>
+        <div class="dd-hmw">Resolves: "How might we make the between-session journey feel like a game she's winning, not a treatment she's following?"</div>
+      </div>
+      <div class="dd-card">
+        <div class="dd-main">"The wave" transition before instructions</div>
+        <div class="dd-insight">Users distrust generic, clinical apps. They need to feel heard before they can be guided. The wave screen — "I'm here, follow me" — closes the emotional gap between the crisis trigger and the first instruction. Empathy before action.</div>
+        <div class="dd-hmw">Resolves: "How might we make her feel like someone is there without requiring another human to be available?"</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ LO-FI WIREFRAMES ══ -->
+<section id="lofi-sec">
+  <div class="container">
+    <span class="section-label fade-in">Process — low fidelity</span>
+    <h2 class="section-title fade-in delay-1">Wireframes <span class="glow">&amp; decisions</span></h2>
+    <p class="section-sub fade-in delay-2">Three screens defined the entire interaction logic before any visual design touched the file.</p>
+    <div class="lofi-grid fade-in delay-3">
+
+      <!-- WF 1: Crisis entry -->
+      <div class="lofi-wrap">
+        <div class="lofi-phone lofi-phone--img">
+          <img src="assets/lofi-1.png" alt="Wireframe 1 — Storm mode" class="lofi-img">
+        </div>
+        <div class="lofi-num">1</div>
+        <div class="lofi-title">Storm mode — crisis entry</div>
+        <div class="lofi-note">The first wireframe question was: what does the user actually see when they open the app in crisis? Everything else was stripped away. Character front and center, one headline. Nothing to read. The layout locked in the "one screen = one action" rule that carried through to high fidelity.</div>
+      </div>
+
+      <!-- WF 2: Home / Shore -->
+      <div class="lofi-wrap">
+        <div class="lofi-phone lofi-phone--img">
+          <img src="assets/lofi-2.png" alt="Wireframe 2 — The Shore" class="lofi-img">
+        </div>
+        <div class="lofi-num">2</div>
+        <div class="lofi-title">Still water — guided action</div>
+        <div class="lofi-note">The second tested the exercise screen structure: character visible for emotional anchoring, one short instruction, a visible timer, and a "Next exercise" CTA. The key decision documented here — body-first instructions instead of breathing — came from the forum research.</div>
+      </div>
+
+      <!-- WF 3: Still water / guided exercise -->
+      <div class="lofi-wrap">
+        <div class="lofi-phone lofi-phone--img">
+          <img src="assets/lofi-3.png" alt="Wireframe 3 — Still water" class="lofi-img">
+        </div>
+        <div class="lofi-num">3</div>
+        <div class="lofi-title">The Shore — calm home state</div>
+        <div class="lofi-note">The third wireframe mapped the home state: how does Sofía arrive here on a non-crisis day? Two card options in the middle, one prominent teal CTA at the bottom for panic mode. This layout was validated by the research insight that the user needs to reach crisis mode in under 3 seconds from any state. </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ HI-FI SCREENS ══ -->
+<section id="screens-sec">
+  <div class="container">
+    <span class="section-label fade-in">High fidelity</span>
+    <h2 class="section-title fade-in delay-1">The <span class="glow">Design</span></h2>
+    <p class="section-sub fade-in delay-2">Five states. Nami always present</p>
+
+    <div class="screens-row fade-in delay-3">
+      <div class="screen-wrap">
+        <div class="screen-phone"><img src="assets/Storm mode.png" alt="screen storm" width="250px" height="300px"></div>
+        <div class="sc-name">Storm mode</div>
+        <div class="sc-desc">"Hey, I've got you" — crisis entry, zero friction</div>
+      </div>
+      <div class="screen-wrap">
+        <div class="screen-phone"><img src="assets/The Shore.png" alt="screen storm" width="250px" height="300px"></div>
+        <div class="sc-name">The Shore</div>
+        <div class="sc-desc">"Hey, Sofía" — calm home, all paths accessible</div>
+      </div>
+      <div class="screen-wrap">
+        <div class="screen-phone"><img src="assets/The wave.png" alt="screen storm" width="250px" height="300px"></div>
+        <div class="sc-name">The wave</div>
+        <div class="sc-desc">"I'm here, follow me" — empathy before instruction</div>
+      </div>
+      <div class="screen-wrap">
+        <div class="screen-phone"><img src="assets/Still water.png" alt="screen storm" width="250px" height="300px"></div>
+        <div class="sc-name">Still water</div>
+        <div class="sc-desc">"Let's do this together" — body-first guided action</div>
+      </div>
+      <div class="screen-wrap">
+        <div class="screen-phone"><img src="assets/After the wave.png" alt="screen storm" width="250px" height="300px"></div>
+        <div class="sc-name">After the wave</div>
+        <div class="sc-desc">"You got through it" — celebration and log</div>
+      </div>
+    </div>
+
+    <!-- Figma Design button here, below screens -->
+    <div class="figma-btn-wrap fade-in">
+      <a href="https://www.figma.com/design/R5Ab1IoByUkSThCSkgfojM/%E2%9A%A1-Product-Design-Challenge---Jimena-Zapolski-s-design?node-id=0-1&t=lGEQO0wlO5AUoAgO-1" target="_blank" rel="noopener" class="btn-teal">View in Figma Design →</a>
+    </div>
+
+    <!-- ACCESSIBILITY -->
+    <div class="access-title fade-in">Accessibility — designing for crisis states</div>
+    <p class="section-why fade-in delay-1">Anxiety episodes affect fine motor skills, cognitive load, and visual processing. Every accessibility decision was made with this context in mind, as a direct response to research indicating how the body behaves during a panic attack.</p>
+    <div class="access-grid fade-in delay-2">
+      <div class="access-card">
+        <div class="access-label">High contrast</div>
+        <div class="access-body">Dark navy background with white text meets WCAG AA at all text sizes. Teal (#00BFCA) and Lavender (#99A8F9) maintain 4.5:1+ contrast ratio for key CTAs — readable even with tunnel vision during high anxiety.</div>
+      </div>
+      <div class="access-card">
+        <div class="access-label">Large touch targets</div>
+        <div class="access-body">All primary CTAs are minimum 56px tall. During a panic attack, fine motor control degrades — small buttons become impossible. The crisis activation button is intentionally oversized, designed for trembling hands.</div>
+      </div>
+      <div class="access-card">
+        <div class="access-label">Minimal reading load</div>
+        <div class="access-body">No screen in the crisis flow requires reading more than 7 words at once. Text size minimum 17px. Short sentences, high line-height. Cognitive load drops sharply during an anxiety spike — the UI absorbs that cost.</div>
+      </div>
+      <div class="access-card">
+        <div class="access-label">Audio + text parallel</div>
+        <div class="access-body">Every instruction is delivered via audio AND displayed as text simultaneously. Users in public spaces, with hearing differences, or who can't process audio during a crisis can still follow every step.</div>
+      </div>
+      <div class="access-card">
+        <div class="access-label">No gesture-only interactions</div>
+        <div class="access-body">The shake gesture and volume shortcut are optional activations — every function is also accessible via tap. Users with motor differences or who are in a context where movement isn't possible aren't locked out.</div>
+      </div>
+      <div class="access-card">
+        <div class="access-label">Night-mode by default</div>
+        <div class="access-body">Dark UI is the only mode. Anxiety peaks at night in low-light environments — a bright white screen is physiologically jarring. No toggle needed: the default is already optimized for 3am.</div>
+      </div>
+    </div>
+
+    <div class="iter-title fade-in">Iteration history</div>
+    <div class="iter-grid fade-in delay-1">
+      <div class="glass">
+        <div class="iter-round">Decision 1 </div>
+        <div class="iter-change">Crisis screen start</div>
+        <div class="iter-why">The first version suggested that the user speak directly after shaking the app or pressing the volume button for quick access. However, after evaluating it in various contexts, I decided to create a visually large and eye-catching button that the user can press to speak or chat if they are with other people.</div>
+      </div>
+      <div class="glass">
+        <div class="iter-round">Decision 2</div>
+        <div class="iter-change">Mild anxiety home</div>
+        <div class="iter-why">On paper, I had planned three buttons one below the other because it was a manual input and not for use during a panic attack. But after rereading the research and investigating different types of anxiety peaks, I decided to change the differentiation and highlight a button with the action color that communicates a real urgency.</div>
+      </div>
+      <div class="glass">
+        <div class="iter-round">Decision 3</div>
+        <div class="iter-change">Intermediate screen</div>
+        <div class="iter-why">When the person taps the "I'm not okay right now" button, a micro-moment was missing between The Shore and Still Water. This would help create an app with an emotional differentiator, connect the user with Nami, and help them trust the process.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ONBOARDING ══ -->
+<section id="onboarding-sec">
+  <div class="container">
+    <span class="section-label fade-in">First interaction</span>
+    <h2 class="section-title fade-in delay-1">The <span class="glow">Onboarding</span></h2>
+    <p class="section-sub fade-in delay-2">Before Nami can help, Nami needs to know you</p>
+    <p class="section-why fade-in delay-2">Most apps take you to a generic home screen. Nami does something different from the very beginning: it listens. The initial setup process isn't a tutorial, but a conversation in which Nami learns what triggers your anxiety, what has helped you before, and when you go to therapy. This information becomes the basis for every subsequent interaction. The more Nami knows, the more precise the support will be.</p>
+
+    <div class="onb-flow fade-in delay-3">
+
+      <div class="onb-step">
+        <div class="onb-num">01</div>
+        <div class="onb-content">
+          <div class="onb-step-title">Nami introduces herself</div>
+          <div class="onb-step-body">Nami addresses the user directly in the first person: "Hi, I'm Nami. I'm here for you during tough times." A warm and concise message. The user's first impression lays the foundation of trust upon which everything else is built.</div>
+        </div>
+      </div>
+
+      <div class="onb-step">
+        <div class="onb-num">02</div>
+        <div class="onb-content">
+          <div class="onb-step-title">Nami asks your name</div>
+          <div class="onb-step-body">Just your name. From now on, Nami will use it in every interaction. "Hello, Sofia" instead of "Hello, user." Personalization begins immediately, before you unlock any features.</div>
+        </div>
+      </div>
+
+      <div class="onb-step">
+        <div class="onb-num">03</div>
+        <div class="onb-content">
+          <div class="onb-step-title">What makes you anxious?</div>
+          <div class="onb-step-body">Nami offers between six and eight common triggers as flexible selection options: exams, social situations, nights alone, health concerns, family, and uncertainty. The user chooses what resonates with them. These elements form the context that shapes Nami's language and prioritized responses.</div>
+        </div>
+      </div>
+
+      <div class="onb-step">
+        <div class="onb-num">04</div>
+        <div class="onb-content">
+          <div class="onb-step-title">What's helped you before?</div>
+          <div class="onb-step-body">Nami asks what has worked in the past: music, movement, cold water, breathing, calling someone, distraction. This lays the foundation for the initial set of tools. The AI ​​doesn't start from scratch, but rather from what the user already knows about themselves, so that the first response to a crisis will feel familiar, not strange.</div>
+        </div>
+      </div>
+
+      <div class="onb-step">
+        <div class="onb-num">05</div>
+        <div class="onb-content">
+          <div class="onb-step-title">When do you see your therapist?</div>
+          <div class="onb-step-body">Day and frequency. Nami schedules a follow-up check-in the day after each session: "How did it go today?" Gentle, no pressure. This creates a connection between sessions and gives the client the feeling that Nami and their therapist are working together.</div>
+        </div>
+      </div>
+
+      <div class="onb-step">
+        <div class="onb-num">06</div>
+        <div class="onb-content">
+          <div class="onb-step-title">Set up the shortcut</div>
+          <div class="onb-step-body">The final welcome screen guides the user through setting up the widget and the shake gesture. It's not presented as a configuration task, but rather as "your escape route." The goal: for the user to know, before the first episode, how to contact Nami in under 3 seconds, without unlocking, searching, or even thinking.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="onb-note fade-in delay-1">
+      <div class="onb-note-label">Why this matters</div>
+      <p>Every answer the user gives during onboarding is stored and used. The first time a crisis episode hits the response is immediate and personal. That's the difference between an app that feels like a stranger and one that feels like it knows you.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ NEXT STEPS ══ -->
+<section id="next-sec">
+  <div class="container">
+    <span class="section-label fade-in">What comes next</span>
+    <h2 class="section-title fade-in delay-1">Next <span class="glow">steps</span></h2>
+    <p class="next-intro fade-in delay-2">Nami resolves the current crisis—but there's a much bigger opportunity: supporting the space between therapy sessions. To get there, the next cycle begins with genuine listening.</p>
+
+    <div class="next-grid">
+
+      <div class="next-card fade-in delay-1">
+        <div class="next-step-num">01 — Testing</div>
+        <div class="next-card-title">Testing with real users</div>
+        <div class="next-card-body">Usability testing sessions with people who are experiencing or have experienced anxiety. The focus: Does Sofia, as a character, inspire trust? Does the crisis flow activate before panic escalates? Is there anything that hinders rather than helps?</div>
+      </div>
+
+      <div class="next-card fade-in delay-2">
+        <div class="next-step-num">02 — CLINICAL RESEARCH</div>
+        <div class="next-card-title">Conversations with therapists</div>
+        <div class="next-card-body">In-depth interviews with psychologists and psychiatrists to understand what happens between sessions: what they record, what they would like to know before each meeting, and what kind of digital support they would consider safe and useful for their patients.</div>
+      </div>
+
+      <div class="next-card fade-in delay-3">
+        <div class="next-step-num">03 — DESIGN ITERATION</div>
+        <div class="next-card-title">Evidence-based redesign</div>
+        <div class="next-card-body">With the lessons learned from testing and interviews, return to the flow and iterate. Prioritize real points of friction over assumed ones. Track each design change against the question: Does this reduce the distance between the difficult moment and help?</div>
+      </div>
+
+    </div>
+
+    <div class="next-vision fade-in delay-2">
+      <div class="next-vision-label">VISION FOR THE FUTURE</div>
+      <p class="next-vision-text">Nami could become the bridge between sessions — where the therapist has real context about how their patient was during the week, and the user feels that the support does not end when they close the office door.</em></p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ AI USAGE ══ -->
+<section id="ai-sec" class="fade-in">
+  <div class="container">
+    <span class="section-label fade-in">Transparency</span>
+    <h2 class="section-title fade-in delay-1">How I worked <span class="glow">with AI</span></h2>
+    <p class="section-sub fade-in delay-2">Not to replace thinking — to accelerate it</p>
+    <div class="ai-cols fade-in delay-3">
+      <div class="glass">
+        <div class="ai-title">Research synthesis</div>
+        <div class="ai-desc">I used Claude, Gemini, and ChatGPT to find the definition of anxiety from different perspectives, patterns in clinical studies, behavioral research, professional information, and app store reviews. I was asked to identify behavioral differences and understand the best option for my users when anxiety peaks.</div>
+      </div>
+      <div class="glass">
+        <div class="ai-title">Definition &amp; Ideation</div>
+        <div class="ai-desc">I used Claude to generate variations of "How might We...?" questions based on others I had already created, allowing me to expand my ideas during brainstorming sessions while remaining within the user profile constraints. I was asked to argue against each concept from Sofia's perspective: "Would I trust this? Would I delete it?" The decision "not to use the streak system" stemmed directly from this question.</div>
+      </div>
+      <div class="glass">
+        <div class="ai-title">Visual &amp; brand design</div>
+        <div class="ai-desc">Once I had already developed the concept, user archetype, and name. I used Adobe Firefly to explore the character's visual directions: the translucent, iridescent wave shape emerged from a combination of "sea creature," "crystal," and "ghost friend". <br> After creating the mood board and low-fidelity screens, I asked him to create a prompt so I could transfer it to Google Stitch to see those initial ideas reflected, but it didn't quite achieve the visual result I was looking for. I used Claude to refine the naming system and ensure brand voice consistency across the five states of the application.</div>
+      </div>
+    </div>
+    <div style="max-width:800px;margin:0 auto;" class="fade-in delay-1">
+      <div class="code-lbl">Example prompt — Research synthesis</div>
+      <div class="code-block">"You are a UX researcher reviewing anxiety forum posts, app store reviews for Calm/Headspace/Dare, and clinical literature on CBT digital interventions. Identify the top 3 behavioral patterns users exhibit during an acute anxiety episode that are NOT addressed by current apps. For each pattern, cite the evidence and explain the design implication."</div>
+      <div class="code-lbl">Example prompt — Adversarial persona test</div>
+      <div class="code-block">"You are Sofía: 17 years old, Buenos Aires, anxiety episodes at night before exams. You've deleted 4 mental health apps in the past year. I'm showing you this app concept: [concept description]. You have 30 seconds before you decide to delete it. What annoys you? What makes you stay? Be brutally honest."</div>
+      <div class="code-lbl">Example prompt — Google Stich</div>
+      <div class="code-block">"Design a mobile app UI called Nami — a mental health companion app for teenagers. The main character is a 3D iridescent wave-shaped creature with lavender and teal tones, big black eyes, translucent water-like texture with water droplets.
+        Color palette: deep dark navy backgrounds (#1E2530, #151130), lavender accent (#8B8FD4), teal action color (#00C8C8), white text (#F0F0F0).
+        Visual style: dark mode, glassmorphism cards with frosted blur effect, soft gradient overlays in lavender and teal, fluid wave-like shapes as decorative elements, subtle iridescent glow effects. NO white backgrounds. NO clinical or medical aesthetic.
+        Screen 1 — Home screen: Nami character centered and large, soft glow around her, greeting text "Hey, I've got you." in light weight typography below, one soft glassmorphism card at the bottom with a quick check-in prompt, minimal navigation.
+        Screen 2 — Crisis mode / Storm screen: full dark background, Nami larger and more present, single bold action text instruction in the center ("Press your feet into the floor"), one large teal CTA button at the bottom, no menus, no distractions, audio wave animation behind Nami suggesting she is speaking.
+        Typography: modern, rounded, light weight. Emotional but clean. No serif fonts.
+        Mood reference: Calm, deep, immersive. Like floating underwater at night. The UI should feel like a safe container, not a medical tool."</div>
+      <!-- Google Stitch result -->
+      <div class="stitch-result fade-in delay-2">
+        <div class="stitch-screen-wrap">
+          <img src="assets/stitch-result.png" alt="Google Stitch result" class="stitch-img" onerror="this.parentElement.classList.add('stitch-placeholder')">
+        </div>
+        <div class="stitch-commentary">
+          <div class="stitch-commentary-label">What it got right — and what it missed</div>
+          <p class="stitch-commentary-text">
+            Stitch's design effectively analyzed the prompt's instructions and generated a consistent system designation that aligned with what I had expressed (colors, typographic hierarchy, and the dark visual tone were all correct). However, the visual result didn't quite achieve what I had envisioned: the character's presence lacked the personality and warmth that Nami needs to connect with the user in a moment of crisis, and it didn't incorporate everything I had planned to create an atmosphere that resonated with the proposed empathetic solution. This confirmed for me that the right visual direction required my own design decisions, not pre-generated ones.          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- ══ FIGJAM CTA ══ -->
+<section id="figjam-cta" class="fade-in">
+  <span class="cta-eyebrow">Full documentation</span>
+  <h2 class="cta-title">Everything is documented</h2>
+  <p class="cta-sub">Research, flows, insights, iterations, decisions. All in one place.</p>
+  <a href="https://www.figma.com/board/r8Iea5ztm9PwXiy12bfzKe/%E2%9A%A1-Product-Design-Challenge---Jimena-Zapolski-s-board?node-id=0-1&t=poiOToTGj7bO9FVu-1" target="_blank" rel="noopener" class="btn-cta">Open the full FigJam board →</a>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="ft">Thanks for watching — Jimena Zapolski</div>
+  <svg width="56" height="18" viewBox="0 0 56 18" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,9 C9,2 18,16 28,9 C38,2 47,16 56,9" stroke="rgba(153,168,249,0.4)" stroke-width="1.8" fill="none"/>
+  </svg>
+  <div class="ft">Product Design Challenge — Light-it 2026</div>
+</footer>
+
+<script>
+// ── LOADING ──
+window.addEventListener('load', () => {
+  const loader = document.getElementById('loading-screen');
+  setTimeout(() => {
+    loader.classList.add('out');
+    loader.addEventListener('animationend', () => loader.remove(), { once: true });
+  }, 2600);
+});
+
+// ── PARTICLES (full hero canvas) ──
+(function() {
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let pts = [];
+
+  function resize() {
+    const hero = document.getElementById('hero');
+    canvas.width  = hero.offsetWidth;
+    canvas.height = hero.offsetHeight;
+    init();
+  }
+
+  function init() {
+    pts = [];
+    for (let i = 0; i < 50; i++) {
+      pts.push({
+        x:  Math.random() * canvas.width,
+        y:  Math.random() * canvas.height,
+        r:  Math.random() * 2.5 + 0.8,
+        dx: (Math.random() - 0.5) * 0.35,
+        dy: (Math.random() - 0.5) * 0.35,
+        c:  Math.random() > 0.55 ? '#99A8F9' : '#00BFCA',
+        a:  Math.random() * 0.45 + 0.08,
+        pulse: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pts.forEach(p => {
+      p.pulse += 0.018;
+      const alpha = p.a * (0.7 + 0.3 * Math.sin(p.pulse));
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.c;
+      ctx.globalAlpha = alpha;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      p.x += p.dx; p.y += p.dy;
+      if (p.x < 0 || p.x > canvas.width)  p.dx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+    });
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  draw();
+  window.addEventListener('resize', resize);
+})();
+
+// ── INTERSECTION OBSERVER (scroll fade-in) ──
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.07 });
+document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+// ── TIMELINE STAGGER ──
+const timelineIO = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.t-step').forEach(step => {
+        const delay = parseInt(step.dataset.delay) || 0;
+        setTimeout(() => step.classList.add('appear'), delay);
+      });
+      timelineIO.disconnect();
+    }
+  });
+}, { threshold: 0.2 });
+const tl = document.getElementById('timeline');
+if (tl) timelineIO.observe(tl);
+
+// ── ACTIVE NAV ──
+const navAs = document.querySelectorAll('.nav-links a');
+const secs  = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  secs.forEach(s => { if (window.scrollY >= s.offsetTop - 130) cur = s.id; });
+  navAs.forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + cur) a.classList.add('active');
+  });
+}, { passive: true });
+
+// ── MOBILE MENU ──
+document.getElementById('ham').addEventListener('click', () => document.getElementById('mob-menu').classList.add('open'));
+document.getElementById('mob-close').addEventListener('click', closeMob);
+function closeMob() { document.getElementById('mob-menu').classList.remove('open'); }
+
+// Hero elements visible immediately after load
+window.addEventListener('load', () => {
+  document.querySelectorAll('#hero .fade-in').forEach(el => {
+    setTimeout(() => el.classList.add('visible'), 300);
+  });
+});
+</script>
+</body>
+</html>
