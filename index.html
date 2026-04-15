@@ -606,31 +606,35 @@
   @media(max-width:768px){ .access-grid { grid-template-columns: 1fr; } }
 
   /* ── PRIORITIZATION MATRIX ── */
-  .prio-matrix { display: flex; align-items: stretch; gap: 8px; margin-bottom: 64px; }
-  .prio-axis-y, .prio-axis-y-low {
-    writing-mode: vertical-rl; text-orientation: mixed;
-    font-size: 10px; letter-spacing: 2px; color: rgba(240,240,240,0.3);
-    display: flex; align-items: center; padding: 8px 0; min-width: 18px;
+  .prio-wrap { margin-bottom: 64px; }
+  .prio-y-labels { display: flex; justify-content: space-between; align-items: center; padding: 0 0 6px 44px; }
+  .prio-y-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(240,240,240,0.3); }
+  .prio-body { display: flex; gap: 8px; align-items: stretch; }
+  .prio-x-axis {
+    display: flex; flex-direction: column; justify-content: space-between; align-items: center;
+    width: 36px; flex-shrink: 0; padding: 8px 0;
   }
-  .prio-axis-y { transform: rotate(180deg); }
-  .prio-grid-wrap { flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr auto 1fr; gap: 2px; position: relative; }
+  .prio-x-label {
+    writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg);
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(240,240,240,0.3);
+  }
+  .prio-grid {
+    flex: 1; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 8px;
+  }
   .prio-quadrant {
     background: rgba(153,168,249,0.04); border: 1px solid rgba(153,168,249,0.1);
-    border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 8px; min-height: 180px;
+    border-radius: 14px; padding: 22px 20px; display: flex; flex-direction: column; gap: 8px;
   }
-  .prio-quadrant.q1 { border-color: rgba(0,191,202,0.25); background: rgba(0,191,202,0.05); }
-  .prio-quadrant.q2 { border-color: rgba(153,168,249,0.2); }
-  .prio-quadrant.q3 { border-color: rgba(153,168,249,0.1); }
-  .prio-quadrant.q4 { border-color: rgba(153,168,249,0.08); }
-  .prio-qlabel { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(240,240,240,0.3); margin-bottom: 6px; }
+  .prio-quadrant.q-tl { border-color: rgba(153,168,249,0.15); }
+  .prio-quadrant.q-tr { border-color: rgba(0,191,202,0.25); background: rgba(0,191,202,0.05); }
+  .prio-quadrant.q-bl { border-color: rgba(153,168,249,0.08); opacity: 0.75; }
+  .prio-quadrant.q-br { border-color: rgba(153,168,249,0.1); opacity: 0.75; }
+  .prio-qlabel { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(240,240,240,0.3); margin-bottom: 4px; }
   .prio-chip { display: inline-block; font-size: 12px; padding: 5px 12px; border-radius: 20px; width: fit-content; }
   .prio-chip.teal { background: rgba(0,191,202,0.15); color: #00BFCA; border: 1px solid rgba(0,191,202,0.3); }
   .prio-chip.lav  { background: rgba(153,168,249,0.12); color: #99A8F9; border: 1px solid rgba(153,168,249,0.25); }
   .prio-chip.dim  { background: rgba(240,240,240,0.04); color: rgba(240,240,240,0.4); border: 1px solid rgba(240,240,240,0.1); }
-  .prio-axis-bottom { grid-column: 1/-1; display: flex; justify-content: space-between; padding: 6px 8px 0; font-size: 10px; letter-spacing: 2px; color: rgba(240,240,240,0.3); }
-  .prio-hline { display: none; }
-  .prio-vline { display: none; }
-  @media(max-width:768px){ .prio-grid-wrap { grid-template-columns: 1fr; } .prio-axis-y, .prio-axis-y-low { display: none; } }
+  @media(max-width:768px){ .prio-grid { grid-template-columns: 1fr; } .prio-x-axis { display: none; } .prio-y-labels { padding-left: 0; } }
 
   /* ── FIGJAM CTA ── */
   #figjam-cta { text-align: center; padding: 120px 52px; }
@@ -1128,41 +1132,52 @@
     <!-- PRIORITIZATION MATRIX -->
     <h3 style="font-size:22px;font-weight:300;color:#fff;margin:64px 0 8px;" class="fade-in">Prioritization matrix</h3>
     <p style="font-size:14px;color:rgba(240,240,240,0.45);margin-bottom:32px;" class="fade-in delay-1">Each concept mapped against two variables: impact on the user during an anxiety episode, and urgency to include in the first version.</p>
-    <div class="prio-matrix fade-in delay-2">
-      <div class="prio-axis-y"><span>HIGH URGENCY</span></div>
-      <div class="prio-grid-wrap">
-        <div class="prio-quadrant q1">
-          <div class="prio-qlabel">Build now</div>
-          <div class="prio-chip teal">No-friction crisis entry (shake/volume)</div>
-          <div class="prio-chip teal">Body-first audio guide</div>
-          <div class="prio-chip teal">One screen = one action</div>
-          <div class="prio-chip teal">Character front and center</div>
-          <div class="prio-chip teal">Conversational onboarding</div>
-        </div>
-        <div class="prio-quadrant q2">
-          <div class="prio-qlabel">Build now (lower urgency)</div>
-          <div class="prio-chip lav">Therapy schedule + check-in</div>
-          <div class="prio-chip lav">Episode log for therapist</div>
-          <div class="prio-chip lav">"After the wave" celebration</div>
-          <div class="prio-chip lav">Switch to chat if audio unavailable</div>
-        </div>
-        <div class="prio-quadrant q3">
-          <div class="prio-qlabel">Defer to v2</div>
-          <div class="prio-chip dim">Character visual evolution</div>
-          <div class="prio-chip dim">Shareable milestone cards</div>
-          <div class="prio-chip dim">Streak / gamification system</div>
-        </div>
-        <div class="prio-quadrant q4">
-          <div class="prio-qlabel">Research first</div>
-          <div class="prio-chip dim">Smartwatch auto-detection</div>
-          <div class="prio-chip dim">Therapist dashboard (B2B)</div>
-          <div class="prio-chip dim">Full long-term AI memory</div>
-        </div>
-        <div class="prio-hline"></div>
-        <div class="prio-vline"></div>
-        <div class="prio-axis-bottom"><span>LOW IMPACT</span><span>HIGH IMPACT</span></div>
+    <div class="prio-wrap fade-in delay-2">
+      <!-- top: impact axis labels -->
+      <div class="prio-y-labels">
+        <span class="prio-y-label">← LOW IMPACT</span>
+        <span class="prio-y-label">HIGH IMPACT →</span>
       </div>
-      <div class="prio-axis-y-low"><span>LOW URGENCY</span></div>
+      <div class="prio-body">
+        <!-- left: urgency axis -->
+        <div class="prio-x-axis">
+          <span class="prio-x-label">HIGH URGENCY</span>
+          <span class="prio-x-label">LOW URGENCY</span>
+        </div>
+        <!-- 2×2 grid -->
+        <div class="prio-grid">
+          <!-- top-left: high urgency, low impact -->
+          <div class="prio-quadrant q-tl">
+            <div class="prio-qlabel">Build now — quick wins</div>
+            <div class="prio-chip lav">Therapy schedule + check-in</div>
+            <div class="prio-chip lav">"After the wave" celebration</div>
+            <div class="prio-chip lav">Switch to chat (audio unavail.)</div>
+          </div>
+          <!-- top-right: high urgency, high impact ★ -->
+          <div class="prio-quadrant q-tr">
+            <div class="prio-qlabel">★ Build now — MVP core</div>
+            <div class="prio-chip teal">No-friction crisis entry</div>
+            <div class="prio-chip teal">Body-first audio guide</div>
+            <div class="prio-chip teal">One screen = one action</div>
+            <div class="prio-chip teal">Character front and center</div>
+            <div class="prio-chip teal">Conversational onboarding</div>
+          </div>
+          <!-- bottom-left: low urgency, low impact -->
+          <div class="prio-quadrant q-bl">
+            <div class="prio-qlabel">Defer — reconsider later</div>
+            <div class="prio-chip dim">Shareable milestone cards</div>
+            <div class="prio-chip dim">Streak / gamification</div>
+            <div class="prio-chip dim">Character visual evolution</div>
+          </div>
+          <!-- bottom-right: low urgency, high impact -->
+          <div class="prio-quadrant q-br">
+            <div class="prio-qlabel">Research first — v2</div>
+            <div class="prio-chip dim">Smartwatch auto-detection</div>
+            <div class="prio-chip dim">Therapist dashboard (B2B)</div>
+            <div class="prio-chip dim">Full long-term AI memory</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <h3 style="font-size:22px;font-weight:300;color:#fff;margin-bottom:36px;" class="fade-in">Minimum Viable Product</h3>
