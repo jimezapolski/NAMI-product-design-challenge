@@ -1,3 +1,4 @@
-# maimo-2023-prog-3-es-6-zapolski
+# ⚡ Product Design Challenge - Light It 
 
-Exercises to learn JavaScript ES6
+## The Brief
+Designing for anxiety beyond the therapist’s office - Create a digital experience that helps people manage anxiety in everyday life—especially in moments where professional support is not immediately available.
